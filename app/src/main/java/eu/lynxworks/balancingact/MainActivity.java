@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = null;
             switch (item.getItemId()) {
                 case R.id.nav_home:
+                    fragment = HomeFragment.instance();
                     break;
                 case R.id.nav_exercise:
                     fragment = ExerciseFragment.instance();
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             1. Inflate the XML view associated with this activity
             2. Build and populate a toolbar
             3. Build and populate a bottom navigation bar
-            4. Load the first fragment
+            4. Load the first fragment (Home)
          */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, FoodFragment.instance());
+        transaction.replace(R.id.fragment_container, HomeFragment.instance());
         transaction.commit();
     }
 

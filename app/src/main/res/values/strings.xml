@@ -7,8 +7,11 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_food_fragment">Hello food fragment</string>
+    <string name="hello_food_fragment">Food fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_exercise_fragment">Hello exercise fragment</string>
+    <string name="hello_exercise_fragment">Exercise fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_home_fragment">Home fragment</string>
 </resources>
