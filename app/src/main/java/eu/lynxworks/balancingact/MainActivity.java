@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_home:
                     break;
                 case R.id.nav_exercise:
+                    fragment = ExerciseFragment.instance();
                     break;
                 case R.id.nav_food:
                     fragment = FoodFragment.instance();
