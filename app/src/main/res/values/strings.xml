@@ -5,4 +5,7 @@
     <string name="nav_food">Food</string>
     <string name="action_user">User configuration</string>
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello food fragment</string>
 </resources>

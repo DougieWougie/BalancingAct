@@ -3,6 +3,8 @@ package eu.lynxworks.balancingact;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,15 +18,23 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment = null;
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    return true;
-                case R.id.navigation_dashboard:
-                    return true;
-                case R.id.navigation_notifications:
-                    return true;
+                case R.id.nav_home:
+                    break;
+                case R.id.nav_exercise:
+                    break;
+                case R.id.nav_food:
+                    fragment = FoodFragment.instance();
+                    break;
             }
-            return false;
+            if (fragment == null){
+                return false;
+            }
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+            return true;
         }
 
     };
@@ -32,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /*  Function is called when created - almost a constructor for the Activity:
-            1. Inflate the XML view asociated with this activity
+            1. Inflate the XML view associated with this activity
             2. Build and populate a toolbar
-            3. Build and populate a bottom navigation bar.
+            3. Build and populate a bottom navigation bar
+            4. Load the first fragment
          */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -44,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, FoodFragment.instance());
+        transaction.commit();
     }
 
     @Override
