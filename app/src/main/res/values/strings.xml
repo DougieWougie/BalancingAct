@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Balancing Act</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_exercise">Exercise</string>
+    <string name="nav_food">Food</string>
+    <string name="action_user">User configuration</string>
+    <string name="action_settings">Settings</string>
+</resources>
