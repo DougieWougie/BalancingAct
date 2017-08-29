@@ -1,7 +1,9 @@
 package eu.lynxworks.balancingact;
 
 /**
- * Created by Dougie Richardson (dr4485) on 18/06/17.
+ * Exercise class
+ * - Defines an exercise.
+ * - Always created with a name, duration and calorie value.
  */
 
 public class Exercise {

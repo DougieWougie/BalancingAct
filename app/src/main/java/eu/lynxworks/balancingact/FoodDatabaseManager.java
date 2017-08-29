@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dougie on 16/06/17.
+ * Manages the SQLite database used to record food objects.
  */
 
 public class FoodDatabaseManager extends SQLiteOpenHelper {
@@ -111,21 +111,26 @@ public class FoodDatabaseManager extends SQLiteOpenHelper {
             index -1, which allows us to use the moveToNext() method in a while loop.
           */
         Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
-        while (cursor.moveToNext()){
-            Food food = new Food.Builder(
-                    cursor.getString(2),
-                    cursor.getFloat(3),
-                    cursor.getFloat(6))
-                    .barcode(cursor.getLong(1))
-                    .brand(cursor.getString(4))
-                    .salt(cursor.getFloat(5))
-                    .carbohydrate(cursor.getFloat(7))
-                    .protein(cursor.getFloat(8))
-                    .fat(cursor.getFloat(9))
-                    .fibre(cursor.getFloat(10))
-                    .sugar(cursor.getFloat(11))
-                    .build();
-            foods.add(food);
+        try{
+            while (cursor.moveToNext()){
+                Food food = new Food.Builder(
+                        cursor.getString(2),
+                        cursor.getFloat(3),
+                        cursor.getFloat(6))
+                        .barcode(cursor.getLong(1))
+                        .brand(cursor.getString(4))
+                        .salt(cursor.getFloat(5))
+                        .carbohydrate(cursor.getFloat(7))
+                        .protein(cursor.getFloat(8))
+                        .fat(cursor.getFloat(9))
+                        .fibre(cursor.getFloat(10))
+                        .sugar(cursor.getFloat(11))
+                        .build();
+                foods.add(food);
+            }
+        }
+        finally {
+            cursor.close();
         }
         return foods;
     }

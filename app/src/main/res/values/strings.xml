@@ -14,4 +14,22 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_home_fragment">Home fragment</string>
+    <string name="food_100g">Values per 100g</string>
+    <string name="food_serving">This portion</string>
+    <string name="food_name">Description</string>
+    <string name="food_brand">Manufacturer</string>
+    <string name="food_energy">Energy (kcals)</string>
+    <string name="food_salt">Salt</string>
+    <string name="food_carbohydrate">Carbohydrate</string>
+    <string name="food_protein">Protein</string>
+    <string name="food_fat">Fat</string>
+    <string name="food_fiber">Fibre</string>
+    <string name="food_sugar">Sugar</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="edit_barcode">Barcode</string>
+    <string name="scan">Scan</string>
+    <string name="search">Search</string>
+    <string name="blank" />
+    <string name="edit_barcode_hint">Enter a product barcode or tap the scan icon</string>
 </resources>
