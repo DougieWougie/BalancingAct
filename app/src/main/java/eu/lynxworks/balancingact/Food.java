@@ -84,10 +84,10 @@ public class Food {
     public float getFibre()         { return fibre; }
     public float getSugar()         { return sugar; }
 
-    // Overiding the toString() method allows us to handle the output a little better!
+    // Override the toString() method allows us to handle the output a little better!
     @Override
     public String toString(){
-        String string = getBarcode() + " / " +
+        return getBarcode() + " / " +
                 getProductName() + " / " +
                 getQuantity() + " / " +
                 getBrand() + " / " +
@@ -98,6 +98,5 @@ public class Food {
                 getFat() + " / " +
                 getFibre() + " / " +
                 getSugar();
-        return string;
     }
 }

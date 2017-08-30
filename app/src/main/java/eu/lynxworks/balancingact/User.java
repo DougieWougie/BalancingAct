@@ -9,7 +9,7 @@ package eu.lynxworks.balancingact;
 
 // TODO: this should be set as a singleton, there's only one user!
 
-public class User {
+class User {
     // Attributes
     private String name;
     private int age;            // Years
@@ -30,12 +30,12 @@ public class User {
     public float getWeight()        { return this.weight; }
     public int getActivityLevel()   { return this.activityLevel; }
 
-    // Setters - not everything changes but it's usefull to be able to make alterations.
-    public void setName(String name)                { this.name = name; }
-    public void setAge(int age)                     { this.age = age; }
-    public void setHeight(float height)             { this.height = height; }
-    public void setWeight(float weight)             { this.weight = weight; }
-    public void setActivityLevel(int activityLevel) { this.activityLevel = activityLevel; }
+    // Setters - not everything changes but it's useful to be able to make alterations.
+    private void setName(String name)                { this.name = name; }
+    private void setAge(int age)                     { this.age = age; }
+    private void setHeight(float height)             { this.height = height; }
+    private void setWeight(float weight)             { this.weight = weight; }
+    private void setActivityLevel(int activityLevel) { this.activityLevel = activityLevel; }
 
     // Constructor
     public User(String name, int age, float height, float weight, int activityLevel) {

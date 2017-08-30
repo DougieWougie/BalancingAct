@@ -6,7 +6,7 @@ package eu.lynxworks.balancingact;
  * - Always created with a name, duration and calorie value.
  */
 
-public class Exercise {
+class Exercise {
     // Attributes
     private String name;
     private float duration;
@@ -18,9 +18,9 @@ public class Exercise {
     public float getCalories()  { return this.calories; }
 
     // Setters
-    public void setName(String name)        { this.name = name; }
-    public void setDuration(float duration) { this.duration = duration; }
-    public void setCalories(float calories) { this.calories = calories; }
+    private void setName(String name)        { this.name = name; }
+    private void setDuration(float duration) { this.duration = duration; }
+    private void setCalories(float calories) { this.calories = calories; }
 
     // Constructor
     public Exercise(String name, float duration, float calories){

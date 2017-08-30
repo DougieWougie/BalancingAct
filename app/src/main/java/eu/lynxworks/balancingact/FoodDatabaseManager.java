@@ -14,10 +14,10 @@ import java.util.List;
  * Manages the SQLite database used to record food objects.
  */
 
-public class FoodDatabaseManager extends SQLiteOpenHelper {
+class FoodDatabaseManager extends SQLiteOpenHelper {
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
         an object as a specific table. It also implements the BaseColumns interface which provides
-        access to th _ID  field, an autoincremented integer value that uniquely identifies each row
+        access to th _ID  field, an auto-incremented integer value that uniquely identifies each row
         in a table. This is _not_ required however is recommended in recent API versions.
      */
     public class FoodEntry implements BaseColumns {
@@ -61,8 +61,8 @@ public class FoodDatabaseManager extends SQLiteOpenHelper {
             "SELECT * FROM " + FoodEntry.TABLE_NAME;
 
     // A change in schema needs an increment in database version!
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Food.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "Food.db";
 
     public FoodDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -103,16 +103,17 @@ public class FoodDatabaseManager extends SQLiteOpenHelper {
         database.
      */
     public List<Food> getAll() {
-        List<Food> foods = new ArrayList<Food>();
+        List<Food> foods = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
             to a useful format (in this case a Food Object). Cursor Objects are initialised at
             index -1, which allows us to use the moveToNext() method in a while loop.
+
+            Try/Finally is replaceable with automatic resource management.
           */
-        Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
-        try{
-            while (cursor.moveToNext()){
+        try (Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null)) {
+            while (cursor.moveToNext()) {
                 Food food = new Food.Builder(
                         cursor.getString(2),
                         cursor.getFloat(3),
@@ -128,9 +129,6 @@ public class FoodDatabaseManager extends SQLiteOpenHelper {
                         .build();
                 foods.add(food);
             }
-        }
-        finally {
-            cursor.close();
         }
         return foods;
     }
