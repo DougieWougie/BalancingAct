@@ -36,6 +36,8 @@
     <string name="food_found">Found food!</string>
     <string name="food_not_found">No results found</string>
     <string name="snack_save_success">Save successful</string>
-    <string name="weight">Weight?</string>
     <string name="title_activity_scan">ScanActivity</string>
+    <string name="barcode_label">Enter barcode or scan</string>
+    <string name="weight_label">Weight (grams)</string>
+    <string name="weight">100</string>
 </resources>

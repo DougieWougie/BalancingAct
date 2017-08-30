@@ -36,7 +36,9 @@ import static android.app.Activity.RESULT_OK;
  */
 public class FoodFragment extends Fragment{
     private String queryBarcode = null;
-    static final int requestCode = 1;
+    private float queryWeight = 0;
+    /* The number below is the weight in grams used to correct for portion size. */
+    static final int units = 100;
 
     public FoodFragment() {
         // Required empty public constructor
@@ -97,7 +99,6 @@ public class FoodFragment extends Fragment{
         This function updates the display with the Food object passed to it.
      */
     private void updateDisplay(Food food) {
-        String feedback;
         if (food != null) {
             try {
                 TextView txt_product = (TextView) getView().findViewById(R.id.txt_food_product);
@@ -121,9 +122,22 @@ public class FoodFragment extends Fragment{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            feedback = getString(R.string.food_found);
-        } else {
-            feedback = getString(R.string.food_not_found);
+            if (queryWeight != 0) {
+                TextView txt_energy = (TextView) getView().findViewById(R.id.txt_energy);
+                TextView txt_salt = (TextView) getView().findViewById(R.id.txt_salt);
+                TextView txt_carb = (TextView) getView().findViewById(R.id.txt_carbohydrate);
+                TextView txt_protein = (TextView) getView().findViewById(R.id.txt_protein);
+                TextView txt_fat = (TextView) getView().findViewById(R.id.txt_fat);
+                TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_fiber);
+                TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_sugar);
+                txt_energy.setText(Float.toString(food.getEnergy()*queryWeight/units));
+                txt_salt.setText(Float.toString(food.getSalt()*queryWeight/units));
+                txt_sugar.setText(Float.toString(food.getSugar()*queryWeight/units));
+                txt_carb.setText(Float.toString(food.getCarbohydrate()*queryWeight/units));
+                txt_protein.setText(Float.toString(food.getProtein()*queryWeight/units));
+                txt_fat.setText(Float.toString(food.getFat()*queryWeight/units));
+                txt_fiber.setText(Float.toString(food.getFibre()*queryWeight/units));
+            }
         }
     }
 
@@ -157,8 +171,12 @@ public class FoodFragment extends Fragment{
 
     private void updateBarcode() {
         EditText editText = (EditText) getView().findViewById(R.id.editBarcode);
+        EditText weightText = (EditText) getView().findViewById(R.id.editWeight);
         if (editText != null) {
             queryBarcode = String.valueOf(editText.getText());
+            if (weightText != null) {
+                queryWeight = Float.valueOf(String.valueOf(weightText.getText()));
+            }
         }
     }
 
@@ -182,17 +200,18 @@ public class FoodFragment extends Fragment{
         protected void onPostExecute(final Food food) {
             super.onPostExecute(food);
             updateDisplay(food);
-            if (food != null) {
+            try {
                 final Button saveButton = (Button) getView().findViewById(R.id.saveButton);
                 final Button cancelButton = (Button) getView().findViewById(R.id.cancelButton);
                 final EditText editWeight = (EditText) getView().findViewById(R.id.editWeight);
-                editWeight.setVisibility(View.VISIBLE);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        /* A database manager is used to save the entry, then a snackbar gives
-                            the user feedback. Finally the buttons are hidden.
+                        /*  A database manager is used to save the entry, then a snackbar gives
+                            the user feedback. Finally the buttons are hidden. The event handlers
+                            are not configured at the same time as the other controls as they
+                            are not visible until this method is called.
                          */
                         FoodDatabaseManager dbManager = new FoodDatabaseManager(getActivity());
                         dbManager.addFood(food);
@@ -218,8 +237,9 @@ public class FoodFragment extends Fragment{
                         snackbar.show();
                     }
                 });
-            } else {
-                clearDisplay();
+            }
+            catch (Exception e){
+                e.printStackTrace();
             }
         }
 
