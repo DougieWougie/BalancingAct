@@ -3,16 +3,21 @@ package eu.lynxworks.balancingact;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
  * This fragment is used to record exercise entries.
  */
-public class ExerciseFragment extends Fragment {
+public class ExerciseFragment extends Fragment{
+    private Exercise exercise;
+
     public ExerciseFragment() {
         // Required empty public constructor
     }
@@ -31,7 +36,60 @@ public class ExerciseFragment extends Fragment {
      */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_exercise, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_exercise, container, false);
+        final Button cancel = (Button) fragmentView.findViewById(R.id.exerciseCancelButton);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearDisplay();
+            }
+        });
+        final Button save = (Button) fragmentView.findViewById(R.id.exerciseSaveButton);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getExercise()==true) {
+                    saveExercise();
+                    save.setVisibility(View.INVISIBLE);
+                    cancel.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        return fragmentView;
+    }
+
+    private void clearDisplay(){
+        EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
+        EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
+        EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
+        editExercise.setText(R.string.blank);
+        editDuration.setText(R.string.blank);
+        editCalories.setText(R.string.blank);
+    }
+
+    private boolean getExercise(){
+        EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
+        EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
+        EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
+        if (editExercise.getText()!=null &&
+            editDuration.getText()!=null &&
+            editCalories.getText()!=null) {
+            exercise = new Exercise(editExercise.getText().toString(),
+                    Float.parseFloat(editDuration.getText().toString()),
+                    Float.parseFloat(editCalories.getText().toString()));
+            return true;
+        }
+        return false;
+    }
+
+    private void saveExercise(){
+        /*  A database manager is used to save the entry, then a snackbar gives
+            the user feedback.
+         */
+        ExerciseDatabaseManager dbManager = new ExerciseDatabaseManager(getActivity());
+        dbManager.addExercise(exercise);
+        Snackbar saveSnackbar = Snackbar.make(getView(), R.string.snack_save_success, Snackbar.LENGTH_SHORT);
+        saveSnackbar.show();
     }
 
     @Override

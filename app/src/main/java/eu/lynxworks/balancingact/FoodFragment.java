@@ -29,14 +29,14 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import static android.app.Activity.RESULT_OK;
+import static eu.lynxworks.balancingact.R.string.blank;
 
 
 /**
  * This fragment is used to record food entries.
  */
-public class FoodFragment extends Fragment{
+public class FoodFragment extends Fragment {
     private String queryBarcode = null;
-    private float queryWeight = 0;
     /* The number below is the weight in grams used to correct for portion size. */
     static final int units = 100;
 
@@ -62,8 +62,8 @@ public class FoodFragment extends Fragment{
         /*  Event handlers for the various components */
         ImageButton searchButton = (ImageButton) fragmentView.findViewById(R.id.searchButton);
         ImageButton scanButton = (ImageButton) fragmentView.findViewById(R.id.scanButton);
-        Button cancelButton = (Button) fragmentView.findViewById(R.id.cancelButton);
-        Button saveButton = (Button) fragmentView.findViewById(R.id.saveButton);
+        Button cancelButton = (Button) fragmentView.findViewById(R.id.foodCancelButton);
+        Button saveButton = (Button) fragmentView.findViewById(R.id.foodSaveButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,17 +81,17 @@ public class FoodFragment extends Fragment{
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
     }
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
     }
 
     @Override
-    public void onDetach(){
+    public void onDetach() {
         super.onDetach();
     }
 
@@ -119,10 +119,12 @@ public class FoodFragment extends Fragment{
                 txt_protein.setText(Float.toString(food.getProtein()));
                 txt_fat.setText(Float.toString(food.getFat()));
                 txt_fiber.setText(Float.toString(food.getFibre()));
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (queryWeight != 0) {
+
+            try {
                 TextView txt_energy = (TextView) getView().findViewById(R.id.txt_energy);
                 TextView txt_salt = (TextView) getView().findViewById(R.id.txt_salt);
                 TextView txt_carb = (TextView) getView().findViewById(R.id.txt_carbohydrate);
@@ -130,21 +132,25 @@ public class FoodFragment extends Fragment{
                 TextView txt_fat = (TextView) getView().findViewById(R.id.txt_fat);
                 TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_fiber);
                 TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_sugar);
-                txt_energy.setText(Float.toString(food.getEnergy()*queryWeight/units));
-                txt_salt.setText(Float.toString(food.getSalt()*queryWeight/units));
-                txt_sugar.setText(Float.toString(food.getSugar()*queryWeight/units));
-                txt_carb.setText(Float.toString(food.getCarbohydrate()*queryWeight/units));
-                txt_protein.setText(Float.toString(food.getProtein()*queryWeight/units));
-                txt_fat.setText(Float.toString(food.getFat()*queryWeight/units));
-                txt_fiber.setText(Float.toString(food.getFibre()*queryWeight/units));
+                txt_energy.setText(Float.toString(food.getEnergy() * food.getQuantity() / units));
+                txt_salt.setText(Float.toString(food.getSalt() * food.getQuantity() / units));
+                txt_sugar.setText(Float.toString(food.getSugar() * food.getQuantity() / units));
+                txt_carb.setText(Float.toString(food.getCarbohydrate() * food.getQuantity() / units));
+                txt_protein.setText(Float.toString(food.getProtein() * food.getQuantity() / units));
+                txt_fat.setText(Float.toString(food.getFat() * food.getQuantity() / units));
+                txt_fiber.setText(Float.toString(food.getFibre() * food.getQuantity() / units));
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
     /*  This function clears the display
      */
-    private void clearDisplay(){
-        try{
+
+    private void clearDisplay() {
+        try {
             TextView txt_product = (TextView) getView().findViewById(R.id.txt_food_product);
             TextView txt_brand = (TextView) getView().findViewById(R.id.txt_food_brand);
             TextView txt_energy = (TextView) getView().findViewById(R.id.txt_100g_energy);
@@ -154,8 +160,26 @@ public class FoodFragment extends Fragment{
             TextView txt_fat = (TextView) getView().findViewById(R.id.txt_100g_fat);
             TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_100g_fiber);
             TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_100g_sugar);
-            txt_product.setText(R.string.blank);
-            txt_brand.setText(R.string.blank);
+            txt_product.setText(blank);
+            txt_brand.setText(blank);
+            txt_energy.setText(blank);
+            txt_salt.setText(blank);
+            txt_sugar.setText(blank);
+            txt_carb.setText(blank);
+            txt_protein.setText(blank);
+            txt_fat.setText(blank);
+            txt_fiber.setText(blank);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            TextView txt_energy = (TextView) getView().findViewById(R.id.txt_energy);
+            TextView txt_salt = (TextView) getView().findViewById(R.id.txt_salt);
+            TextView txt_carb = (TextView) getView().findViewById(R.id.txt_carbohydrate);
+            TextView txt_protein = (TextView) getView().findViewById(R.id.txt_protein);
+            TextView txt_fat = (TextView) getView().findViewById(R.id.txt_fat);
+            TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_fiber);
+            TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_sugar);
             txt_energy.setText(R.string.blank);
             txt_salt.setText(R.string.blank);
             txt_sugar.setText(R.string.blank);
@@ -163,20 +187,16 @@ public class FoodFragment extends Fragment{
             txt_protein.setText(R.string.blank);
             txt_fat.setText(R.string.blank);
             txt_fiber.setText(R.string.blank);
-        }
-        catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void updateBarcode() {
         EditText editText = (EditText) getView().findViewById(R.id.editBarcode);
-        EditText weightText = (EditText) getView().findViewById(R.id.editWeight);
         if (editText != null) {
             queryBarcode = String.valueOf(editText.getText());
-            if (weightText != null) {
-                queryWeight = Float.valueOf(String.valueOf(weightText.getText()));
-            }
         }
     }
 
@@ -201,9 +221,8 @@ public class FoodFragment extends Fragment{
             super.onPostExecute(food);
             updateDisplay(food);
             try {
-                final Button saveButton = (Button) getView().findViewById(R.id.saveButton);
-                final Button cancelButton = (Button) getView().findViewById(R.id.cancelButton);
-                final EditText editWeight = (EditText) getView().findViewById(R.id.editWeight);
+                final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
+                final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -219,7 +238,6 @@ public class FoodFragment extends Fragment{
                         saveSnackbar.show();
                         saveButton.setVisibility(View.INVISIBLE);
                         cancelButton.setVisibility(View.INVISIBLE);
-                        editWeight.setVisibility(View.INVISIBLE);
                     }
                 });
                 cancelButton.setVisibility(View.VISIBLE);
@@ -232,13 +250,11 @@ public class FoodFragment extends Fragment{
                         clearDisplay();
                         saveButton.setVisibility(View.INVISIBLE);
                         cancelButton.setVisibility(View.INVISIBLE);
-                        editWeight.setVisibility(View.INVISIBLE);
-                        Snackbar snackbar = Snackbar.make(view, R.string.cancel, Snackbar.LENGTH_SHORT);
+                        Snackbar snackbar = Snackbar.make(view, R.string.cancelled, Snackbar.LENGTH_SHORT);
                         snackbar.show();
                     }
                 });
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
