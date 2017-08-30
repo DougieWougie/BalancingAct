@@ -289,14 +289,25 @@
             android:id="@+id/editBarcode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/edit_barcode"
             android:hint="@string/edit_barcode_hint"
+            android:text="@string/edit_barcode"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/scanButton"
             app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
+
+        <EditText
+            android:id="@+id/editWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/weight"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
         <ImageButton
             android:contentDescription="@string/scan"
@@ -307,7 +318,8 @@
             android:layout_marginTop="8dp"
             app:layout_constraintRight_toLeftOf="@+id/searchButton"
             app:layout_constraintTop_toBottomOf="@+id/cancelButton"
-            app:srcCompat="@drawable/action_scan" />
+            app:srcCompat="@drawable/action_scan"
+            android:layout_marginRight="8dp" />
 
         <ImageButton
             android:contentDescription="@string/search"
@@ -318,7 +330,8 @@
             android:layout_marginTop="8dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cancelButton"
-            app:srcCompat="@drawable/action_search" />
+            app:srcCompat="@drawable/action_search"
+            android:layout_marginRight="8dp" />
 
     </android.support.constraint.ConstraintLayout>
 
