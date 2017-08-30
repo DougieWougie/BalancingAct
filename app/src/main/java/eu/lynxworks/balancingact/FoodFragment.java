@@ -38,7 +38,7 @@ import static eu.lynxworks.balancingact.R.string.blank;
 public class FoodFragment extends Fragment {
     private String queryBarcode = null;
     /* The number below is the weight in grams used to correct for portion size. */
-    static final int units = 100;
+    private static final int units = 100;
 
     public FoodFragment() {
         // Required empty public constructor
@@ -67,7 +67,7 @@ public class FoodFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                search(view);
+                search();
             }
         });
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -200,7 +200,7 @@ public class FoodFragment extends Fragment {
         }
     }
 
-    private void search(View view) {
+    private void search() {
         updateBarcode();
         new SearchBarcode().execute("");
     }
@@ -282,7 +282,7 @@ public class FoodFragment extends Fragment {
                     (3) parse the response.
               */
             try {
-                /*  (1) Create and open a connection using the HTTP GET method. If no connection,
+                /*  Create and open a connection using the HTTP GET method. If no connection,
                     we return null - design by contract.
                  */
                 URL anUrl = new URL(jsonQuery);
@@ -298,14 +298,19 @@ public class FoodFragment extends Fragment {
 
                 /*  (2) Read the response
                  */
-                InputStream inputStream = anURLConnection.getInputStream();
-                StringBuilder stringBuffer = new StringBuilder();
-                bufferedReader = new BufferedReader((new InputStreamReader(inputStream)));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuffer.append(line).append("\n");
+                try {
+                    InputStream inputStream = anURLConnection.getInputStream();
+                    StringBuilder stringBuffer = new StringBuilder();
+                    bufferedReader = new BufferedReader((new InputStreamReader(inputStream)));
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuffer.append(line).append("\n");
+                    }
+                    jsonResponse = stringBuffer.toString();
                 }
-                jsonResponse = stringBuffer.toString();
+                catch (Exception e){
+                    jsonResponse = null;
+                }
 
                 /* (3) Parse the response
                  */
@@ -321,7 +326,7 @@ public class FoodFragment extends Fragment {
                         long barcode = Long.parseLong(product.getString("id"));
                         String productName = product.getString("product_name");
                         /*  Bit of a fudge - the JSON returns a string where we really
-                            need an iteger so we'll remove the " g".
+                            need an integer so we'll remove the " g".
                          */
                         String quantity = product.getString("quantity");
                         if (quantity.endsWith(" g")) {

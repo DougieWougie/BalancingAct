@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/labelExercise" />
 
         <TextView
-            android:id="@+id/textViewlabelDuration"
+            android:id="@+id/labelDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_duration"
@@ -56,7 +56,7 @@
             android:ems="10"
             android:inputType="number"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewlabelDuration" />
+            app:layout_constraintTop_toBottomOf="@+id/labelDuration" />
 
         <TextView
             android:id="@+id/labelCalories"

@@ -5,7 +5,7 @@
 
     <!-- JSON enquiry needs Internet access -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Camera used to grab barcodes -->
+    <!-- Camera used to grab barcode -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!--
             WRITE_EXTERNAL_STORAGE is needed to write to _any_ directory in Android

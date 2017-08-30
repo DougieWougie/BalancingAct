@@ -15,7 +15,7 @@ import android.widget.EditText;
 /**
  * This fragment is used to record exercise entries.
  */
-public class ExerciseFragment extends Fragment{
+public class ExerciseFragment extends Fragment {
     private Exercise exercise;
 
     public ExerciseFragment() {
@@ -48,7 +48,7 @@ public class ExerciseFragment extends Fragment{
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getExercise()==true) {
+                if (getExercise()) {
                     saveExercise();
                     save.setVisibility(View.INVISIBLE);
                     cancel.setVisibility(View.INVISIBLE);
@@ -58,47 +58,60 @@ public class ExerciseFragment extends Fragment{
         return fragmentView;
     }
 
-    private void clearDisplay(){
-        EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
-        EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
-        EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
-        editExercise.setText(R.string.blank);
-        editDuration.setText(R.string.blank);
-        editCalories.setText(R.string.blank);
+    private void clearDisplay() {
+        try {
+            EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
+            EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
+            EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
+            editExercise.setText(R.string.blank);
+            editDuration.setText(R.string.blank);
+            editCalories.setText(R.string.blank);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
-    private boolean getExercise(){
-        EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
-        EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
-        EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
-        if (editExercise.getText()!=null &&
-            editDuration.getText()!=null &&
-            editCalories.getText()!=null) {
-            exercise = new Exercise(editExercise.getText().toString(),
-                    Float.parseFloat(editDuration.getText().toString()),
-                    Float.parseFloat(editCalories.getText().toString()));
-            return true;
+    private boolean getExercise() {
+        try {
+            EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
+            EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
+            EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
+            if (editExercise.getText().toString() == null ||
+                editDuration.getText().toString() == null ||
+                editCalories.getText().toString() == null )
+            {
+                exercise = new Exercise(editExercise.getText().toString(),
+                        Float.parseFloat(editDuration.getText().toString()),
+                        Float.parseFloat(editCalories.getText().toString()));
+                return true;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    private void saveExercise(){
+    private void saveExercise() {
         /*  A database manager is used to save the entry, then a snackbar gives
             the user feedback.
          */
-        ExerciseDatabaseManager dbManager = new ExerciseDatabaseManager(getActivity());
-        dbManager.addExercise(exercise);
-        Snackbar saveSnackbar = Snackbar.make(getView(), R.string.snack_save_success, Snackbar.LENGTH_SHORT);
-        saveSnackbar.show();
+        try {
+            ExerciseDatabaseManager dbManager = new ExerciseDatabaseManager(getActivity());
+            dbManager.addExercise(exercise);
+            Snackbar saveSnackbar = Snackbar.make(getView(), R.string.snack_save_success, Snackbar.LENGTH_SHORT);
+            saveSnackbar.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
     }
 
     @Override
-    public void onDetach(){
+    public void onDetach() {
         super.onDetach();
     }
 }

@@ -11,14 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Dougie Richardson (dr4485) on 18/06/17.
- */
-
-public class ActiveDayDatabaseManager extends SQLiteOpenHelper {
+class ActiveDayDatabaseManager extends SQLiteOpenHelper {
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
     an object as a specific table. It also implements the BaseColumns interface which provides
-    access to th _ID  field, an autoincremented integer value that uniquely identifies each row
+    access to th _ID  field, an auto incremented integer value that uniquely identifies each row
     in a table. This is _not_ required however is recommended in recent API versions.
  */
     public class ActiveDayEntry implements BaseColumns {
@@ -48,8 +44,8 @@ public class ActiveDayDatabaseManager extends SQLiteOpenHelper {
             "SELECT * FROM " + ActiveDayEntry.TABLE_NAME;
 
     // A change in schema needs an increment in database version!
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "ActiveDay.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "ActiveDay.db";
 
     public ActiveDayDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -84,7 +80,7 @@ public class ActiveDayDatabaseManager extends SQLiteOpenHelper {
         database.
      */
     public List<ActiveDay> getAll() {
-        List<ActiveDay> activeDays = new ArrayList<ActiveDay>();
+        List<ActiveDay> activeDays = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted

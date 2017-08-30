@@ -10,14 +10,10 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Dougie Richardson (dr4485) on 18/06/17.
- */
-
-public class UserDatabaseManager extends SQLiteOpenHelper{
+class UserDatabaseManager extends SQLiteOpenHelper{
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
     an object as a specific table. It also implements the BaseColumns interface which provides
-    access to th _ID  field, an autoincremented integer value that uniquely identifies each row
+    access to th _ID  field, an auto increment integer value that uniquely identifies each row
     in a table. This is _not_ required however is recommended in recent API versions.
  */
     public class UserEntry implements BaseColumns {
@@ -49,8 +45,8 @@ public class UserDatabaseManager extends SQLiteOpenHelper{
             "SELECT * FROM " + UserEntry.TABLE_NAME;
 
     // A change in schema needs an increment in database version!
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "User.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "User.db";
 
     public UserDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -85,7 +81,7 @@ public class UserDatabaseManager extends SQLiteOpenHelper{
         database.
      */
     public List<User> getAll() {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted

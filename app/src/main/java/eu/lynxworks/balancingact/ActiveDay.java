@@ -18,18 +18,18 @@ public class ActiveDay {
     public int getStepsTaken()          { return stepsTaken; }
 
     // Setters
-    public void setDate(String date) {
+    private void setDate(String date) {
         this.date = date;
     }
-    public void setCaloriesConsumed(float caloriesConsumed) {
+    private void setCaloriesConsumed(float caloriesConsumed) {
         this.caloriesConsumed = caloriesConsumed;
     }
 
-    public void setCaloriesExpended(float caloriesExpended) {
+    private void setCaloriesExpended(float caloriesExpended) {
         this.caloriesExpended = caloriesExpended;
     }
 
-    public void setStepsTaken(int stepsTaken) {
+    private void setStepsTaken(int stepsTaken) {
         this.stepsTaken = stepsTaken;
     }
 
