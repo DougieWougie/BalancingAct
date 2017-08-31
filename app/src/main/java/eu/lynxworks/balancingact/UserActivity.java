@@ -48,4 +48,11 @@ public class UserActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /*  This method checks if there is user data in the database. */
+    private boolean checkDatabase(){
+        UserDatabaseManager dbManager = new UserDatabaseManager(getApplicationContext());
+        dbManager.getAll();
+        return false;
+    }
 }

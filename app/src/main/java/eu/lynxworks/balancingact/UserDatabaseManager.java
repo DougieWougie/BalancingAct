@@ -25,6 +25,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         public static final String COLUMN_AGE = "age";
         public static final String COLUMN_HEIGHT = "height";
         public static final String COLUMN_WEIGHT = "weight";
+        public static final String COLUMN_SEX = "sex";
         public static final String COLUMN_ACTIVITY = "activityLevel";
     }
 
@@ -36,6 +37,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
                     UserEntry.COLUMN_AGE + " INTEGER, " +
                     UserEntry.COLUMN_HEIGHT + " REAL, " +
                     UserEntry.COLUMN_WEIGHT + " REAL, " +
+                    UserEntry.COLUMN_SEX + " TEXT, " +
                     UserEntry.COLUMN_ACTIVITY + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -71,6 +73,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         values.put(UserEntry.COLUMN_AGE, user.getAge());
         values.put(UserEntry.COLUMN_HEIGHT, user.getHeight());
         values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
+        values.put(UserEntry.COLUMN_SEX, user.getSex());
         values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
         db.insert(UserEntry.TABLE_NAME, null, values);
         db.close();
@@ -95,7 +98,8 @@ class UserDatabaseManager extends SQLiteOpenHelper{
                     cursor.getInt(1),
                     cursor.getFloat(2),
                     cursor.getFloat(3),
-                    cursor.getInt(4));
+                    cursor.getString(4),
+                    cursor.getInt(5));
             users.add(user);
         }
         return users;
