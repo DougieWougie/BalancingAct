@@ -1,5 +1,6 @@
 package eu.lynxworks.balancingact;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         switch(menuItem.getItemId()){
             case R.id.action_user:
                 /*  Start the user activity. */
+                Intent userIntent = new Intent(findViewById(android.R.id.content).getContext(), UserActivity.class);
+                startActivity(userIntent);
                 return true;
             case R.id.action_settings:
                 /*  Start the settings activity. */
@@ -85,7 +88,5 @@ public class MainActivity extends AppCompatActivity {
                  */
                 return super.onOptionsItemSelected(menuItem);
         }
-
-
     }
 }

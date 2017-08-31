@@ -36,7 +36,11 @@
         <activity
             android:name=".ScanActivity"
             android:label="@string/title_activity_scan"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UserActivity"
+            android:label="@string/user_activity_title"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

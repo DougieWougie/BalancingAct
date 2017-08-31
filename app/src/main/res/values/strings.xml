@@ -38,4 +38,10 @@
     <string name="label_exercise">Exercise</string>
     <string name="label_duration">Duration (minutes)</string>
     <string name="label_calories">Calories (kcal)</string>
+    <string name="label_user_activity">Activity level (4 is highest)</string>
+    <string name="label_user_weight">Weight (kg)</string>
+    <string name="label_user_height">Height (cm)</string>
+    <string name="label_user_age">Age</string>
+    <string name="label_user_name">Name</string>
+    <string name="user_activity_title">Update user details</string>
 </resources>
