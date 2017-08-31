@@ -7,8 +7,35 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_food_fragment">Hello food fragment</string>
+    <string name="hello_home_fragment">Home fragment</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_exercise_fragment">Hello exercise fragment</string>
+    <string name="food_100g">Values per 100g</string>
+    <string name="food_serving">This portion</string>
+    <string name="food_name">Description</string>
+    <string name="food_brand">Manufacturer</string>
+    <string name="food_energy">Energy (kcals)</string>
+    <string name="food_salt">Salt</string>
+    <string name="food_carbohydrate">Carbohydrate</string>
+    <string name="food_protein">Protein</string>
+    <string name="food_fat">Fat</string>
+    <string name="food_fiber">Fibre</string>
+    <string name="food_sugar">Sugar</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="edit_barcode">737628064502</string>
+    <string name="scan">Scan</string>
+    <string name="search">Search</string>
+    <string name="blank" />
+    <string name="edit_barcode_hint">Enter a product barcode or tap the scan icon</string>
+    <string name="food_found">Found food!</string>
+    <string name="food_not_found">No results found</string>
+    <string name="snack_save_success">Save successful</string>
+    <string name="title_activity_scan">ScanActivity</string>
+    <string name="barcode_label">Enter barcode or scan</string>
+    <string name="weight_label">Weight (grams)</string>
+    <string name="weight">100</string>
+    <string name="cancelled">Entry cancelled!</string>
+    <string name="label_exercise">Exercise</string>
+    <string name="label_duration">Duration (minutes)</string>
+    <string name="label_calories">Calories (kcal)</string>
 </resources>
