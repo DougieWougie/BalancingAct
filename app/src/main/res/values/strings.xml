@@ -44,4 +44,9 @@
     <string name="label_user_age">Age</string>
     <string name="label_user_name">Name</string>
     <string name="user_activity_title">Update user details</string>
+    <string name="fill_all_notification">All fields are required!</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="bmi">BMI</string>
+    <string name="bmr">BMR</string>
 </resources>

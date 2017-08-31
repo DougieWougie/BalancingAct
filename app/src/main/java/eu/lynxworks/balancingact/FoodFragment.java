@@ -36,6 +36,12 @@ import static eu.lynxworks.balancingact.R.string.blank;
  * This fragment is used to record food entries.
  */
 public class FoodFragment extends Fragment {
+    /*  Database might be utilised, however closing a database is an intensive action. For
+        that reason, the close is carried out only when the fragment is destroyed - so needs
+        to be opened on creation.
+    */
+    private FoodDatabaseManager dbManager;
+
     private String queryBarcode = null;
     /* The number below is the weight in grams used to correct for portion size. */
     private static final int units = 100;
@@ -59,6 +65,8 @@ public class FoodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_food, container, false);
+        dbManager = new FoodDatabaseManager(getContext());
+
         /*  Event handlers for the various components */
         ImageButton searchButton = (ImageButton) fragmentView.findViewById(R.id.searchButton);
         ImageButton scanButton = (ImageButton) fragmentView.findViewById(R.id.scanButton);
@@ -232,7 +240,6 @@ public class FoodFragment extends Fragment {
                             are not configured at the same time as the other controls as they
                             are not visible until this method is called.
                          */
-                        FoodDatabaseManager dbManager = new FoodDatabaseManager(getActivity());
                         dbManager.addFood(food);
                         Snackbar saveSnackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
                         saveSnackbar.show();
@@ -381,5 +388,11 @@ public class FoodFragment extends Fragment {
                 editBarcode.setText(data.getStringExtra("barcodeKey"));
             }
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        dbManager.close();
+        super.onDestroy();
     }
 }

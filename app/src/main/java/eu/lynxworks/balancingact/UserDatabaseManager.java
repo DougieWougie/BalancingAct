@@ -10,6 +10,8 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
+import static eu.lynxworks.balancingact.UserDatabaseManager.UserEntry.TABLE_NAME;
+
 class UserDatabaseManager extends SQLiteOpenHelper{
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
     an object as a specific table. It also implements the BaseColumns interface which provides
@@ -31,7 +33,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
 
     /*  Define commonly used SQL statements */
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + UserEntry.TABLE_NAME + " (" +
+            "CREATE TABLE " + TABLE_NAME + " (" +
                     UserEntry._ID + " INTEGER PRIMARY KEY, " +    // This is the BaseColumns _ID!
                     UserEntry.COLUMN_NAME + " TEXT, " +
                     UserEntry.COLUMN_AGE + " INTEGER, " +
@@ -41,10 +43,10 @@ class UserDatabaseManager extends SQLiteOpenHelper{
                     UserEntry.COLUMN_ACTIVITY + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     private static final String SQL_SELECT_QUERY =
-            "SELECT * FROM " + UserEntry.TABLE_NAME;
+            "SELECT * FROM " + TABLE_NAME;
 
     // A change in schema needs an increment in database version!
     private static final int DATABASE_VERSION = 1;
@@ -61,8 +63,13 @@ class UserDatabaseManager extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
+    }
+
+    public void drop() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(SQL_DELETE_ENTRIES);
     }
 
     /*  Method takes an User object and stores in the database. */
@@ -75,7 +82,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
         values.put(UserEntry.COLUMN_SEX, user.getSex());
         values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
-        db.insert(UserEntry.TABLE_NAME, null, values);
+        db.insert(TABLE_NAME, null, values);
         db.close();
         return user;
     }
@@ -91,17 +98,35 @@ class UserDatabaseManager extends SQLiteOpenHelper{
             to a useful format (in this case a Food Object). Cursor Objects are initialised at
             index -1, which allows us to use the moveToNext() method in a while loop.
           */
-        Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
-        while (cursor.moveToNext()){
-            User user = new User(
-                    cursor.getString(0),
-                    cursor.getInt(1),
-                    cursor.getFloat(2),
-                    cursor.getFloat(3),
-                    cursor.getString(4),
-                    cursor.getInt(5));
-            users.add(user);
+        try {
+            Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
+            while (cursor.moveToNext()) {
+                User user = new User(
+                        cursor.getString(0),
+                        cursor.getInt(1),
+                        cursor.getFloat(2),
+                        cursor.getFloat(3),
+                        cursor.getString(4),
+                        cursor.getInt(5));
+                users.add(user);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
         return users;
+    }
+
+    /*  Method updates a cpecific record. */
+    public void updateUser(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserEntry.COLUMN_NAME, user.getName());
+        values.put(UserEntry.COLUMN_AGE, user.getAge());
+        values.put(UserEntry.COLUMN_HEIGHT, user.getHeight());
+        values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
+        values.put(UserEntry.COLUMN_SEX, user.getSex());
+        values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
+        db.replace(TABLE_NAME, null, values);
     }
 }
