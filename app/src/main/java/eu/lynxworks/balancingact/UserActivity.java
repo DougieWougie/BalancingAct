@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -96,11 +97,26 @@ public class UserActivity extends AppCompatActivity {
         EditText height = (EditText) findViewById(R.id.editUserHeight);
         EditText weight = (EditText) findViewById(R.id.editUserWeight);
         RatingBar activity = (RatingBar) findViewById(R.id.ratingUserActivity);
-        name.setText(getTheUser().getName());
-        age.setText(getTheUser().getAge());
-        height.setText(Float.toString(getTheUser().getHeight()));
-        weight.setText(Float.toString(getTheUser().getWeight()));
-        activity.setNumStars(getTheUser().getActivityLevel());
+        RadioGroup sex = (RadioGroup) findViewById(R.id.radioUserSex);
+        /*  Try catch is used because there are so many type conversions going on that
+            it is extremely easy to build in difficult to trace bugs.
+         */
+        try {
+            name.setText(getTheUser().getName());
+            age.setText(Integer.toString(getTheUser().getAge()));
+            height.setText(Float.toString(getTheUser().getHeight()));
+            weight.setText(Float.toString(getTheUser().getWeight()));
+            activity.setNumStars(getTheUser().getActivityLevel());
+            if(getTheUser().getSex()=="Male"){
+                sex.check(R.id.radioUserMale);
+            }
+            else {
+                sex.check(R.id.radioUserFemale);
+            }
+        }
+        catch (Exception e){
+            Log.d("Dougie", "Exception in populateDisplay", e);
+        }
     }
 
     /*  This method populates the display. */
