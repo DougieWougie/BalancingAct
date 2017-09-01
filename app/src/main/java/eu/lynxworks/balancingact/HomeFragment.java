@@ -15,9 +15,6 @@ import android.view.ViewGroup;
  * This fragment is used to record home entries.
  */
 public class HomeFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -46,14 +43,14 @@ public class HomeFragment extends Fragment {
             2. Select an adapter (the adapter pattern is used to bind
                different information).
          */
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home);
         /*  If content doesn't get resized (which it doesn't in this app) then this
             optimisation improves performance.
          */
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new DayAdapter(getContext());
+        RecyclerView.Adapter adapter = new DayAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
         return view;

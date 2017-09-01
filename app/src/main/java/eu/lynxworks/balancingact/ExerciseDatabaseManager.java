@@ -89,6 +89,7 @@ class ExerciseDatabaseManager extends SQLiteOpenHelper {
                     cursor.getFloat(2));
             exercises.add(exercise);
         }
+        cursor.close();
         return exercises;
     }
 }

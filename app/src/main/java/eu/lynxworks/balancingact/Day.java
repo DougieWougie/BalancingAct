@@ -6,11 +6,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.Date;
 
-/**
- * Created by Dougie Richardson (dr4485) on 01/09/17.
- */
-
-public class Day {
+class Day {
     /*  Attributes */
     private String theDate;
     private List<Exercise> exercises;
@@ -18,10 +14,10 @@ public class Day {
     private int steps;
 
     /*  Getters */
-    public String getTheDate()              { return this.theDate; }
-    public List<Exercise> getExercises()    { return this.exercises; }
-    public List<Food> getFoods()            { return this.foods; }
-    public int getSteps()                   { return this.steps; }
+    private String getTheDate()              { return this.theDate; }
+    private List<Exercise> getExercises()    { return this.exercises; }
+    private List<Food> getFoods()            { return this.foods; }
+    public int getSteps()                    { return this.steps; }
 
     /*  Setters */
     public void setTheDate(Date date) {
@@ -65,7 +61,7 @@ public class Day {
     /*  The next two methods iterate through the associated data and total the amount
         of calories consumed and expended.
      */
-    public float caloriesConsumed(){
+    private float caloriesConsumed(){
         float totalCalories = 0f;
         for(Food food:getFoods()){
             totalCalories += food.getEnergy();
@@ -73,7 +69,7 @@ public class Day {
         return totalCalories;
     }
 
-    public float caloriesExpended(){
+    private float caloriesExpended(){
         float totalCalories = 0f;
         for(Exercise exercise:getExercises()){
             totalCalories += exercise.getCalories();

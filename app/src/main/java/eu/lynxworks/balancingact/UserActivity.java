@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserActivity extends AppCompatActivity {
     /*  Database might be utilised, however closing a database is an intensive action. For
@@ -24,10 +25,10 @@ public class UserActivity extends AppCompatActivity {
     private UserDatabaseManager dbManager;
     private User theUser;
 
-    public void setTheUser(User user){
+    private void setTheUser(User user){
         theUser = user;
     }
-    public User getTheUser(){
+    private User getTheUser(){
         return theUser;
     }
 
@@ -49,7 +50,7 @@ public class UserActivity extends AppCompatActivity {
         //  dbManager.drop(); // Uncomment to drop the table - useful for diagnosing issues.
 
         /*  With a single user, if they're in the database we want to load their details. */
-        if ((dbManager.isEmpty()) == false) {
+        if (!(dbManager.isEmpty())) {
             getUserFromDatabase();
             populateDisplay();
         }
@@ -107,7 +108,7 @@ public class UserActivity extends AppCompatActivity {
             height.setText(Float.toString(getTheUser().getHeight()));
             weight.setText(Float.toString(getTheUser().getWeight()));
             activity.setNumStars(getTheUser().getActivityLevel());
-            if(getTheUser().getSex()=="Male"){
+            if(Objects.equals(getTheUser().getSex(), "Male")){
                 sex.check(R.id.radioUserMale);
             }
             else {

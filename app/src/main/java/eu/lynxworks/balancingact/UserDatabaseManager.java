@@ -94,6 +94,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         if(cursor.getCount() == 0){
             return true;
         }
+        cursor.close();
         return false;
     }
 
@@ -120,6 +121,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
                         cursor.getInt(cursor.getColumnIndex(UserEntry.COLUMN_ACTIVITY)));
                 users.add(user);
             }
+            cursor.close();
         }
         catch (Exception e){
             e.printStackTrace();

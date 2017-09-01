@@ -8,11 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Dougie Richardson (dr4485) on 01/09/17.
- */
-
-public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Day> dataSet;
 
     /*  The defined ViewHolder only requires the components that will be interacted
@@ -20,7 +16,10 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RecyclerView.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView date, caloriesIn, caloriesOut, balance;
+        final TextView date;
+        final TextView caloriesIn;
+        final TextView caloriesOut;
+        final TextView balance;
 
         public ViewHolder(View view) {
             super(view);

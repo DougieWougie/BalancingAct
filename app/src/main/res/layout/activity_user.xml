@@ -25,7 +25,7 @@
                 android:id="@+id/labelUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:labelFor="@+id/editUserName"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/label_user_name"
@@ -36,7 +36,6 @@
                 android:id="@+id/editUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:ems="10"
                 android:inputType="textPersonName"
@@ -48,7 +47,7 @@
                 android:id="@+id/labelUserAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:labelFor="@+id/editUserAge"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/label_user_age"
@@ -78,6 +77,7 @@
 
             <TextView
                 android:id="@+id/labelUserWeight"
+                android:labelFor="@+id/editUserHeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -87,6 +87,7 @@
 
             <EditText
                 android:id="@+id/editUserHeight"
+                android:labelFor="@+id/editUserWeight"
                 android:layout_width="133dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="18dp"
@@ -135,7 +136,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:text="@string/cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/userSaveButton"
@@ -156,7 +156,6 @@
                 android:id="@+id/labelUserBMI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/bmi"
                 android:visibility="invisible"
@@ -168,7 +167,6 @@
                 android:id="@+id/textUserBMI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
                 android:text="@string/bmr"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:visibility="invisible"
@@ -183,7 +181,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="16dp"
                 app:layout_constraintLeft_toRightOf="@+id/editUserName"
-                android:layout_marginLeft="8dp">
+                android:layout_marginStart="8dp">
 
                 <RadioButton
                     android:id="@+id/radioUserFemale"
@@ -198,7 +196,7 @@
                     android:id="@+id/radioUserMale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
+                    android:layout_marginStart="0dp"
                     android:layout_marginTop="0dp"
                     android:text="@string/male"
                     app:layout_constraintLeft_toLeftOf="@+id/radioUserFemale"
