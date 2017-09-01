@@ -84,7 +84,10 @@ public class Food {
     public float getFibre()         { return fibre; }
     public float getSugar()         { return sugar; }
 
-    // Override the toString() method allows us to handle the output a little better!
+    /*  Over riding toString is a technique advised in Effective Java 2nd edition
+        by Joshua Bloch. The superclass returns a fairly unhelpful hashcode representing
+        the class - this allows a more useful message. In this instance, the data.
+     */
     @Override
     public String toString(){
         return getBarcode() + " / " +
