@@ -1,7 +1,10 @@
 package eu.lynxworks.balancingact;
 
-import java.util.Date;
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
+
 import java.util.List;
+import java.util.Date;
 
 /**
  * Created by Dougie Richardson (dr4485) on 01/09/17.
@@ -9,18 +12,25 @@ import java.util.List;
 
 public class Day {
     /*  Attributes */
-    private Date theDate;
+    private String theDate;
     private List<Exercise> exercises;
     private List<Food> foods;
+    private int steps;
 
     /*  Getters */
-    public Date getTheDate()                { return theDate; }
-    public List<Exercise> getExercises()    { return exercises; }
-    public List<Food> getFoods()            { return foods; }
+    public String getTheDate()              { return this.theDate; }
+    public List<Exercise> getExercises()    { return this.exercises; }
+    public List<Food> getFoods()            { return this.foods; }
+    public int getSteps()                   { return this.steps; }
 
     /*  Setters */
-    public void setTheDate(Date theDate) {
-        this.theDate = theDate;
+    public void setTheDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        try {
+            this.theDate = simpleDateFormat.format(simpleDateFormat.parse(date.toString()));
+        } catch (Exception e) {
+            Log.d("Dougie", "Exception in ", e);
+        }
     }
 
     public void setExercises(List<Exercise> exercises) {
@@ -29,6 +39,11 @@ public class Day {
 
     public void setFoods(List<Food> foods) {
         this.foods = foods;
+    }
+
+    /*  TODO: Setter for the daily step counter. */
+    public void setSteps(){
+
     }
 
     public void addExercise(Exercise exercise) {
