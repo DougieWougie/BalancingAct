@@ -47,6 +47,30 @@ public class Day {
         this.foods.remove(food);
     }
 
+    /*  The next two methods iterate through the associated data and total the amount
+        of calories consumed and expended.
+     */
+    public float caloriesConsumed(){
+        float totalCalories = 0f;
+        for(Food food:getFoods()){
+            totalCalories += food.getEnergy();
+        }
+        return totalCalories;
+    }
+
+    public float caloriesExpended(){
+        float totalCalories = 0f;
+        for(Exercise exercise:getExercises()){
+            totalCalories += exercise.getCalories();
+        }
+        return totalCalories;
+    }
+
+    /*  This method works out the calorie balance. */
+    public float calorieBalance() {
+        return caloriesConsumed() - caloriesExpended();
+    }
+
     /*  Over riding toString is a technique advised in Effective Java 2nd edition
         by Joshua Bloch. The superclass returns a fairly unhelpful hashcode representing
         the class - this allows a more useful message. In this instance, the data.
