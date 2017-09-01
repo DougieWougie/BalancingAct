@@ -50,4 +50,6 @@
     <string name="bmi">BMI</string>
     <string name="bmr">BMR</string>
     <string name="card_label_total">Calorie balance</string>
+    <string name="card_food_image">Food</string>
+    <string name="card_exercise_image">Exercise</string>
 </resources>
