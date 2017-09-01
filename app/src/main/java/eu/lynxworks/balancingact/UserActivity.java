@@ -21,7 +21,14 @@ public class UserActivity extends AppCompatActivity {
         to be opened on creation.
     */
     private UserDatabaseManager dbManager;
-    private User user = null;
+    private User theUser;
+
+    public void setTheUser(User user){
+        theUser = user;
+    }
+    public User getTheUser(){
+        return theUser;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +44,12 @@ public class UserActivity extends AppCompatActivity {
         Button save = (Button) findViewById(R.id.userSaveButton);
         Button cancel = (Button) findViewById(R.id.userCancelButton);
 
-        // dbManager.drop(); // Uncomment to drop the table - useful for diagnosing issues.
+        //  Uncommenting the following will drop the database, useful for diagnostics.
+        //  dbManager.drop(); // Uncomment to drop the table - useful for diagnosing issues.
 
-        user = getUser();
-
-        if (user != null) {
+        /*  With a single user, if they're in the database we want to load their details. */
+        if ((dbManager.isEmpty()) == false) {
+            getUserFromDatabase();
             populateDisplay();
         }
 
@@ -50,7 +58,7 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (populateFromDisplay()) {
                     try {
-                        dbManager.updateUser(user);
+                        dbManager.updateUser(getTheUser());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -88,11 +96,11 @@ public class UserActivity extends AppCompatActivity {
         EditText height = (EditText) findViewById(R.id.editUserHeight);
         EditText weight = (EditText) findViewById(R.id.editUserWeight);
         RatingBar activity = (RatingBar) findViewById(R.id.ratingUserActivity);
-        name.setText(user.getName());
-        age.setText(user.getAge());
-        height.setText(Float.toString(user.getHeight()));
-        weight.setText(Float.toString(user.getWeight()));
-        activity.setNumStars(user.getActivityLevel());
+        name.setText(getTheUser().getName());
+        age.setText(getTheUser().getAge());
+        height.setText(Float.toString(getTheUser().getHeight()));
+        weight.setText(Float.toString(getTheUser().getWeight()));
+        activity.setNumStars(getTheUser().getActivityLevel());
     }
 
     /*  This method populates the display. */
@@ -115,21 +123,34 @@ public class UserActivity extends AppCompatActivity {
             snackbar.show();
             return false;
         }
-        user = new User(name.getText().toString(),
-                Integer.parseInt(age.getText().toString()),
-                Float.valueOf(height.getText().toString()),
-                Float.valueOf(weight.getText().toString()),
-                sex,
-                activity.getNumStars());
+        setTheUser(new User(name.getText().toString(),
+                            Integer.parseInt(age.getText().toString()),
+                            Float.valueOf(height.getText().toString()),
+                            Float.valueOf(weight.getText().toString()),
+                            sex,
+                            activity.getNumStars()));
         return true;
     }
 
-    /*  This method checks if there is user data in the database. */
-    private User getUser() {
-        List<User> data = dbManager.getAll();
-        return data.get(0);
+    /*  This method checks if there is user data in the database. Android doesn't handle checking
+        empty tables very gracefully so try catch is used to return null if the table is empty.
+     */
+    private void getUserFromDatabase() {
+        User aUser;
+        try{
+            List<User> userList = dbManager.getAll();
+            aUser = userList.get(0);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            aUser = null;
+        }
+        setTheUser(aUser);
     }
 
+    /*  We only close the Database Manager on the Activity being destroyed as it is an intensive
+        operation. This prove to be an essential optimisation!
+     */
     @Override
     public void onDestroy() {
         dbManager.close();

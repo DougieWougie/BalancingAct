@@ -10,14 +10,12 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.lynxworks.balancingact.UserDatabaseManager.UserEntry.TABLE_NAME;
-
 class UserDatabaseManager extends SQLiteOpenHelper{
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
-    an object as a specific table. It also implements the BaseColumns interface which provides
-    access to th _ID  field, an auto increment integer value that uniquely identifies each row
-    in a table. This is _not_ required however is recommended in recent API versions.
- */
+    	an object as a specific table. It also implements the BaseColumns interface which provides
+    	access to th _ID  field, an auto increment integer value that uniquely identifies each row
+    	in a table. This is _not_ required however is recommended in recent API versions.
+ 	*/
     public class UserEntry implements BaseColumns {
         // Table name
         public static final String TABLE_NAME = "user_entry";
@@ -33,7 +31,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
 
     /*  Define commonly used SQL statements */
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + TABLE_NAME + " (" +
+            "CREATE TABLE " + UserEntry.TABLE_NAME + " (" +
                     UserEntry._ID + " INTEGER PRIMARY KEY, " +    // This is the BaseColumns _ID!
                     UserEntry.COLUMN_NAME + " TEXT, " +
                     UserEntry.COLUMN_AGE + " INTEGER, " +
@@ -43,12 +41,14 @@ class UserDatabaseManager extends SQLiteOpenHelper{
                     UserEntry.COLUMN_ACTIVITY + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + TABLE_NAME;
+            "DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME;
 
     private static final String SQL_SELECT_QUERY =
-            "SELECT * FROM " + TABLE_NAME;
+            "SELECT * FROM " + UserEntry.TABLE_NAME;
 
-    // A change in schema needs an increment in database version!
+    /*  Changing the schema requires that DATABASE_VERSION is incremented or the tables will
+        not be updated correctly.
+     */
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "User.db";
 
@@ -63,7 +63,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
         onCreate(db);
     }
 
@@ -82,9 +82,19 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
         values.put(UserEntry.COLUMN_SEX, user.getSex());
         values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
-        db.insert(TABLE_NAME, null, values);
+        db.insert(UserEntry.TABLE_NAME, null, values);
         db.close();
         return user;
+    }
+
+    /*  Method returns true if the table is empty or false if there is a row. */
+    public boolean isEmpty() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
+        if(cursor.getCount() == 0){
+            return true;
+        }
+        return false;
     }
 
     /*  Method returns a List of User objects representing all the items stored in the
@@ -102,12 +112,12 @@ class UserDatabaseManager extends SQLiteOpenHelper{
             Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
             while (cursor.moveToNext()) {
                 User user = new User(
-                        cursor.getString(0),
-                        cursor.getInt(1),
-                        cursor.getFloat(2),
-                        cursor.getFloat(3),
-                        cursor.getString(4),
-                        cursor.getInt(5));
+                        cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_NAME)),
+                        cursor.getInt(cursor.getColumnIndex(UserEntry.COLUMN_AGE)),
+                        cursor.getFloat(cursor.getColumnIndex(UserEntry.COLUMN_HEIGHT)),
+                        cursor.getFloat(cursor.getColumnIndex(UserEntry.COLUMN_WEIGHT)),
+                        cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_SEX)),
+                        cursor.getInt(cursor.getColumnIndex(UserEntry.COLUMN_ACTIVITY)));
                 users.add(user);
             }
         }
@@ -117,16 +127,20 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         return users;
     }
 
-    /*  Method updates a cpecific record. */
+    /*  Method updates a specific record. */
     public void updateUser(User user){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(UserEntry.COLUMN_NAME, user.getName());
-        values.put(UserEntry.COLUMN_AGE, user.getAge());
-        values.put(UserEntry.COLUMN_HEIGHT, user.getHeight());
-        values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
-        values.put(UserEntry.COLUMN_SEX, user.getSex());
-        values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
-        db.replace(TABLE_NAME, null, values);
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(UserEntry.COLUMN_NAME, user.getName());
+            values.put(UserEntry.COLUMN_AGE, user.getAge());
+            values.put(UserEntry.COLUMN_HEIGHT, user.getHeight());
+            values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
+            values.put(UserEntry.COLUMN_SEX, user.getSex());
+            values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
+            db.replace(UserEntry.TABLE_NAME, null, values);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
