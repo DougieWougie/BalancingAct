@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class UserActivity extends AppCompatActivity {
@@ -39,9 +40,14 @@ public class UserActivity extends AppCompatActivity {
 
         dbManager = new DatabaseManager(getApplicationContext());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        catch (Exception e){
+            Log.d("Dougie", "setDisplayHomeUpAsEnabled threw an exception", e);
+        }
 
         Button save = (Button) findViewById(R.id.userSaveButton);
         Button cancel = (Button) findViewById(R.id.userCancelButton);
@@ -104,9 +110,9 @@ public class UserActivity extends AppCompatActivity {
          */
         try {
             name.setText(getTheUser().getName());
-            age.setText(Integer.toString(getTheUser().getAge()));
-            height.setText(Float.toString(getTheUser().getHeight()));
-            weight.setText(Float.toString(getTheUser().getWeight()));
+            age.setText(String.format(Locale.getDefault(), "%d", getTheUser().getAge()));
+            height.setText(String.format(Locale.getDefault(), "%.1f", getTheUser().getHeight()));
+            weight.setText(String.format(Locale.getDefault(), "%.1f", getTheUser().getWeight()));
             activity.setNumStars(getTheUser().getActivityLevel());
             if(Objects.equals(getTheUser().getSex(), "Male")){
                 sex.check(R.id.radioUserMale);

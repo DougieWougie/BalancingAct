@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.URL;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -120,13 +121,13 @@ public class FoodFragment extends Fragment {
                 TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_100g_sugar);
                 txt_product.setText(food.getProductName());
                 txt_brand.setText(food.getBrand());
-                txt_energy.setText(Float.toString(food.getEnergy()));
-                txt_salt.setText(Float.toString(food.getSalt()));
-                txt_sugar.setText(Float.toString(food.getSugar()));
-                txt_carb.setText(Float.toString(food.getCarbohydrate()));
-                txt_protein.setText(Float.toString(food.getProtein()));
-                txt_fat.setText(Float.toString(food.getFat()));
-                txt_fiber.setText(Float.toString(food.getFibre()));
+                txt_energy.setText(String.format(Locale.getDefault(), "%.1f", food.getEnergy()));
+                txt_salt.setText(String.format(Locale.getDefault(), "%.1f", food.getSalt()));
+                txt_sugar.setText(String.format(Locale.getDefault(), "%.1f", food.getSugar()));
+                txt_carb.setText(String.format(Locale.getDefault(), "%.1f", food.getCarbohydrate()));
+                txt_protein.setText(String.format(Locale.getDefault(), "%.1f", food.getProtein()));
+                txt_fat.setText(String.format(Locale.getDefault(), "%.1f", food.getFat()));
+                txt_fiber.setText(String.format(Locale.getDefault(), "%.1f", food.getFibre()));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -140,13 +141,13 @@ public class FoodFragment extends Fragment {
                 TextView txt_fat = (TextView) getView().findViewById(R.id.txt_fat);
                 TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_fiber);
                 TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_sugar);
-                txt_energy.setText(Float.toString(food.getEnergy() * food.getQuantity() / units));
-                txt_salt.setText(Float.toString(food.getSalt() * food.getQuantity() / units));
-                txt_sugar.setText(Float.toString(food.getSugar() * food.getQuantity() / units));
-                txt_carb.setText(Float.toString(food.getCarbohydrate() * food.getQuantity() / units));
-                txt_protein.setText(Float.toString(food.getProtein() * food.getQuantity() / units));
-                txt_fat.setText(Float.toString(food.getFat() * food.getQuantity() / units));
-                txt_fiber.setText(Float.toString(food.getFibre() * food.getQuantity() / units));
+                txt_energy.setText(String.format(Locale.getDefault(), "%.1f", food.getEnergy() * food.getQuantity() / units));
+                txt_salt.setText(String.format(Locale.getDefault(), "%.1f", food.getSalt() * food.getQuantity() / units));
+                txt_sugar.setText(String.format(Locale.getDefault(), "%.1f", food.getSugar() * food.getQuantity() / units));
+                txt_carb.setText(String.format(Locale.getDefault(), "%.1f", food.getCarbohydrate() * food.getQuantity() / units));
+                txt_protein.setText(String.format(Locale.getDefault(), "%.1f", food.getProtein() * food.getQuantity() / units));
+                txt_fat.setText(String.format(Locale.getDefault(), "%.1f", food.getFat() * food.getQuantity() / units));
+                txt_fiber.setText(String.format(Locale.getDefault(), "%.1f", food.getFibre() * food.getQuantity() / units));
 
             } catch (Exception e) {
                 e.printStackTrace();
