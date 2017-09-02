@@ -42,7 +42,7 @@ class ExerciseDatabaseManager extends SQLiteOpenHelper {
 
     // A change in schema needs an increment in database version!
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "Exercise.db";
+    private static final String DATABASE_NAME = "BalancingAct.db";
 
     public ExerciseDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

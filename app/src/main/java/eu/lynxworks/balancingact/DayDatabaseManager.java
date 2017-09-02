@@ -39,7 +39,7 @@ class DayDatabaseManager extends SQLiteOpenHelper {
 
     // A change in schema needs an increment in database version!
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "Day.db";
+    private static final String DATABASE_NAME = "BalancingAct.db";
 
     public DayDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

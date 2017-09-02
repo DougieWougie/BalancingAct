@@ -50,7 +50,7 @@ class UserDatabaseManager extends SQLiteOpenHelper{
         not be updated correctly.
      */
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "User.db";
+    private static final String DATABASE_NAME = "BalancingAct.db";
 
     public UserDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

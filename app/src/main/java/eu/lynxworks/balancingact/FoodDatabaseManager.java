@@ -62,7 +62,7 @@ class FoodDatabaseManager extends SQLiteOpenHelper {
 
     // A change in schema needs an increment in database version!
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "Food.db";
+    private static final String DATABASE_NAME = "BalancingAct.db";
 
     public FoodDatabaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
