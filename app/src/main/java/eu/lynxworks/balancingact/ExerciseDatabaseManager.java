@@ -24,6 +24,8 @@ class ExerciseDatabaseManager extends SQLiteOpenHelper {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DURATION = "duration";
         public static final String COLUMN_CALORIES = "calories";
+        /*  Foreign key used to join Exercise and the Day that it was done on. */
+        public static final String COLUMN_DAY = "day";
     }
 
     /*  Define commonly used SQL statements */
@@ -32,13 +34,18 @@ class ExerciseDatabaseManager extends SQLiteOpenHelper {
                     ExerciseEntry._ID + "INTEGER PRIMARY KEY," +    // This is the BaseColumns _ID!
                     ExerciseEntry.COLUMN_NAME + " TEXT," +
                     ExerciseEntry.COLUMN_DURATION + " REAL," +
-                    ExerciseEntry.COLUMN_CALORIES + " REAL)";
+                    ExerciseEntry.COLUMN_CALORIES + " REAL," +
+                    ExerciseEntry.COLUMN_DAY + " INTEGER);";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + ExerciseEntry.TABLE_NAME;
 
     private static final String SQL_SELECT_QUERY =
             "SELECT * FROM " + ExerciseEntry.TABLE_NAME;
+
+    private static final String SQL_DAY_QUERY =
+            "SELECT * FROM " + ExerciseEntry.TABLE_NAME +
+            "JOIN ";
 
     // A change in schema needs an increment in database version!
     private static final int DATABASE_VERSION = 1;
@@ -55,16 +62,22 @@ class ExerciseDatabaseManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        /*  This needs work - currently it drops the existing data. We need a set of functions
+            that allow us to migrate the data.
+         */
         db.execSQL("DROP TABLE IF EXISTS " + ExerciseEntry.TABLE_NAME);
         onCreate(db);
     }
 
-    /*  Method takes an Exercise object and stores in the database. */
+    /*  Method takes an Exercise object and stores in the database. Note that the Day foreign
+        key is not added here - that's done by a DAO object elsewhere.
+     */
     public Exercise addExercise(Exercise exercise){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ExerciseEntry.COLUMN_NAME, exercise.getName());
         values.put(ExerciseEntry.COLUMN_DURATION, exercise.getDuration());
+        values.put(ExerciseEntry.COLUMN_CALORIES, exercise.getCalories());
         db.insert(ExerciseEntry.TABLE_NAME, null, values);
         db.close();
         return exercise;
@@ -80,13 +93,17 @@ class ExerciseDatabaseManager extends SQLiteOpenHelper {
         /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
             to a useful format (in this case a Food Object). Cursor Objects are initialised at
             index -1, which allows us to use the moveToNext() method in a while loop.
+
+            Cursor access is troublesome, so we utilise the getString with getColumnIndex - this
+            prevents accessing the wrong field.
           */
         Cursor cursor = db.rawQuery(SQL_SELECT_QUERY, null);
         while (cursor.moveToNext()){
             Exercise exercise = new Exercise(
-                    cursor.getString(0),
-                    cursor.getFloat(1),
-                    cursor.getFloat(2));
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_NAME)),
+                    cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_DURATION)),
+                    cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_CALORIES)),
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_DAY)));
             exercises.add(exercise);
         }
         cursor.close();
