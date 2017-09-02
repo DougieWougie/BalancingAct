@@ -96,7 +96,7 @@ public class ExerciseFragment extends Fragment {
             the user feedback.
          */
         try {
-            ExerciseDatabaseManager dbManager = new ExerciseDatabaseManager(getActivity());
+            DatabaseManager dbManager = new DatabaseManager(getActivity());
             dbManager.addExercise(exercise);
             Snackbar saveSnackbar = Snackbar.make(getView(), R.string.snack_save_success, Snackbar.LENGTH_SHORT);
             saveSnackbar.show();

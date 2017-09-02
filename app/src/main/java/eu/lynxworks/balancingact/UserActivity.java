@@ -22,7 +22,7 @@ public class UserActivity extends AppCompatActivity {
         that reason, the close is carried out only when the fragment is destroyed - so needs
         to be opened on creation.
     */
-    private UserDatabaseManager dbManager;
+    private DatabaseManager dbManager;
     private User theUser;
 
     private void setTheUser(User user){
@@ -37,7 +37,7 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        dbManager = new UserDatabaseManager(getApplicationContext());
+        dbManager = new DatabaseManager(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,7 +50,7 @@ public class UserActivity extends AppCompatActivity {
         //  dbManager.drop(); // Uncomment to drop the table - useful for diagnosing issues.
 
         /*  With a single user, if they're in the database we want to load their details. */
-        if (!(dbManager.isEmpty())) {
+        if (!(dbManager.isUserEmpty())) {
             getUserFromDatabase();
             populateDisplay();
         }
@@ -155,7 +155,7 @@ public class UserActivity extends AppCompatActivity {
     private void getUserFromDatabase() {
         User aUser;
         try{
-            List<User> userList = dbManager.getAll();
+            List<User> userList = dbManager.getAllUser();
             aUser = userList.get(0);
         }
         catch (Exception e){

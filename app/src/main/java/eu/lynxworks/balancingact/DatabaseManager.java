@@ -1,9 +1,14 @@
 package eu.lynxworks.balancingact;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  This class handles all SQLite database actions within the application. In an earlier iteration,
@@ -177,5 +182,173 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(UserEntry.SQL_DELETE_ENTRIES);
         db.execSQL(DayEntry.SQL_DELETE_ENTRIES);
         db.execSQL(FoodEntry.SQL_DELETE_ENTRIES);
+    }
+
+    /*  Method takes a Food object and stores in the database. */
+    public Food addFood(Food food){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(FoodEntry.COLUMN_BARCODE, food.getBarcode());
+        values.put(FoodEntry.COLUMN_PRODUCTNAME, food.getProductName());
+        values.put(FoodEntry.COLUMN_QUANTITY, food.getQuantity());
+        values.put(FoodEntry.COLUMN_BRAND, food.getBrand());
+        values.put(FoodEntry.COLUMN_SALT, food.getSalt());
+        values.put(FoodEntry.COLUMN_ENERGY, food.getEnergy());
+        values.put(FoodEntry.COLUMN_CARBOHYDRATE, food.getCarbohydrate());
+        values.put(FoodEntry.COLUMN_PROTEIN, food.getProtein());
+        values.put(FoodEntry.COLUMN_FAT, food.getFat());
+        values.put(FoodEntry.COLUMN_FIBRE, food.getFibre());
+        values.put(FoodEntry.COLUMN_SUGAR, food.getSugar());
+        db.insert(FoodEntry.TABLE, null, values);
+        db.close();
+        return food;
+    }
+
+    /*  Method takes an Exercise object and stores in the database. Note that the Day foreign
+        key is not added here - that's done by a DAO object elsewhere.
+    */
+    public Exercise addExercise(Exercise exercise){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ExerciseEntry.COLUMN_NAME, exercise.getName());
+        values.put(ExerciseEntry.COLUMN_DURATION, exercise.getDuration());
+        values.put(ExerciseEntry.COLUMN_CALORIES, exercise.getCalories());
+        db.insert(ExerciseEntry.TABLE, null, values);
+        db.close();
+        return exercise;
+    }
+
+    /*  Method takes an User object and stores in the database. */
+    public User addUser(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserEntry.COLUMN_NAME, user.getName());
+        values.put(UserEntry.COLUMN_AGE, user.getAge());
+        values.put(UserEntry.COLUMN_HEIGHT, user.getHeight());
+        values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
+        values.put(UserEntry.COLUMN_SEX, user.getSex());
+        values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
+        db.insert(UserEntry.TABLE, null, values);
+        db.close();
+        return user;
+    }
+
+    /*  Method updates a specific record. */
+    public void updateUser(User user){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(UserEntry.COLUMN_NAME, user.getName());
+            values.put(UserEntry.COLUMN_AGE, user.getAge());
+            values.put(UserEntry.COLUMN_HEIGHT, user.getHeight());
+            values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
+            values.put(UserEntry.COLUMN_SEX, user.getSex());
+            values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
+            db.replace(UserEntry.TABLE, null, values);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*  Method returns a List of Food objects representing all the items stored in the
+        database.
+    */
+    public List<Food> getAllFood() {
+        List<Food> foods = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
+            to a useful format (in this case a Food Object). Cursor Objects are initialised at
+            index -1, which allows us to use the moveToNext() method in a while loop.
+
+            Try/Finally is replaceable with automatic resource management.
+          */
+        try (Cursor cursor = db.rawQuery(FoodEntry.SQL_SELECT_QUERY, null)) {
+            while (cursor.moveToNext()) {
+                Food food = new Food.Builder(
+                        cursor.getString(2),
+                        cursor.getFloat(3),
+                        cursor.getFloat(6))
+                        .barcode(cursor.getLong(1))
+                        .brand(cursor.getString(4))
+                        .salt(cursor.getFloat(5))
+                        .carbohydrate(cursor.getFloat(7))
+                        .protein(cursor.getFloat(8))
+                        .fat(cursor.getFloat(9))
+                        .fibre(cursor.getFloat(10))
+                        .sugar(cursor.getFloat(11))
+                        .build();
+                foods.add(food);
+            }
+        }
+        return foods;
+    }
+
+    /*  Method returns a List of Exercise objects representing all the items stored in the
+        database.
+    */
+    public List<Exercise> getAll() {
+        List<Exercise> exercises = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
+            to a useful format (in this case a Food Object). Cursor Objects are initialised at
+            index -1, which allows us to use the moveToNext() method in a while loop.
+
+            Cursor access is troublesome, so we utilise the getString with getColumnIndex - this
+            prevents accessing the wrong field.
+          */
+        Cursor cursor = db.rawQuery(ExerciseEntry.SQL_SELECT_QUERY, null);
+        while (cursor.moveToNext()){
+            Exercise exercise = new Exercise(
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_NAME)),
+                    cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_DURATION)),
+                    cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_CALORIES)),
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_DAY)));
+            exercises.add(exercise);
+        }
+        cursor.close();
+        return exercises;
+    }
+    /*  Method returns true if the table is empty or false if there is a row. */
+    public boolean isUserEmpty() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(UserEntry.SQL_SELECT_QUERY, null);
+        if(cursor.getCount() == 0){
+            return true;
+        }
+        cursor.close();
+        return false;
+    }
+
+    /*  Method returns a List of User objects representing all the items stored in the
+    database.
+ */
+    public List<User> getAllUser() {
+        List<User> users = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
+            to a useful format (in this case a Food Object). Cursor Objects are initialised at
+            index -1, which allows us to use the moveToNext() method in a while loop.
+          */
+        try {
+            Cursor cursor = db.rawQuery(UserEntry.SQL_SELECT_QUERY, null);
+            while (cursor.moveToNext()) {
+                User user = new User(
+                        cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_NAME)),
+                        cursor.getInt(cursor.getColumnIndex(UserEntry.COLUMN_AGE)),
+                        cursor.getFloat(cursor.getColumnIndex(UserEntry.COLUMN_HEIGHT)),
+                        cursor.getFloat(cursor.getColumnIndex(UserEntry.COLUMN_WEIGHT)),
+                        cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_SEX)),
+                        cursor.getInt(cursor.getColumnIndex(UserEntry.COLUMN_ACTIVITY)));
+                users.add(user);
+            }
+            cursor.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return users;
     }
 }

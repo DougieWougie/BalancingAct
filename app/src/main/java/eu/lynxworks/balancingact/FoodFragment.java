@@ -40,7 +40,7 @@ public class FoodFragment extends Fragment {
         that reason, the close is carried out only when the fragment is destroyed - so needs
         to be opened on creation.
     */
-    private FoodDatabaseManager dbManager;
+    private DatabaseManager dbManager;
 
     private String queryBarcode = null;
     /* The number below is the weight in grams used to correct for portion size. */
@@ -65,7 +65,7 @@ public class FoodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_food, container, false);
-        dbManager = new FoodDatabaseManager(getContext());
+        dbManager = new DatabaseManager(getContext());
 
         /*  Event handlers for the various components */
         ImageButton searchButton = (ImageButton) fragmentView.findViewById(R.id.searchButton);
