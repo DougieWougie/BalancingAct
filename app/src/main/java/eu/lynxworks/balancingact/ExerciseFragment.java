@@ -53,6 +53,10 @@ public class ExerciseFragment extends Fragment {
                     save.setVisibility(View.INVISIBLE);
                     cancel.setVisibility(View.INVISIBLE);
                 }
+                else {
+                    Snackbar snackbar = Snackbar.make(view, R.string.warning_exercise, Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                }
             }
         });
         return fragmentView;
