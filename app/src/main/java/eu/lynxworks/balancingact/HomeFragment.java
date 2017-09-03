@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -64,6 +67,17 @@ public class HomeFragment extends Fragment {
 //        TextView textView = (TextView) view.findViewById(R.id.homeText);
 //        textView.setText(today.toString());
 
+        EditText editText = (EditText) view.findViewById(R.id.editText);
+        Button button = (Button) view.findViewById(R.id.button2);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseManager dbManager = new DatabaseManager(getContext());
+                List<Exercise> exercises = dbManager.getAllExercise();
+                List<Food> foods = dbManager.getAllFood();
+            }
+        });
+
         return view;
     }
 
@@ -71,9 +85,9 @@ public class HomeFragment extends Fragment {
         Day day = null;
         try {
             DatabaseManager dbManager = new DatabaseManager(getContext());
-            day = dbManager.getDay(new Date());
+            day = dbManager.getDay(new java.sql.Date((new Date()).getTime()));
             if(day==null){
-                dbManager.saveDay(new Day(new Date()));
+                dbManager.saveDay(new Day(new java.sql.Date((new Date()).getTime())));
             }
         } catch (Exception e) {
             Log.d("Dougie", "Exception in ", e);

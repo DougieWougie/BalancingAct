@@ -1,8 +1,8 @@
 package eu.lynxworks.balancingact;
 
-import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -39,9 +39,10 @@ class Exercise {
         setDuration(duration);
         setCalories(calories);
         try {
-        Date today = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-            setDay(simpleDateFormat.format(simpleDateFormat.parse(today.toString())));
+            Date today = new Date();
+            SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+            String todayString = yearMonthDay.format(today);
+            setDay(todayString);
         } catch (Exception e) {
             setDay(null);
             Log.d("Dougie", "Exception creating a date for use in an Exercise constructor ", e);

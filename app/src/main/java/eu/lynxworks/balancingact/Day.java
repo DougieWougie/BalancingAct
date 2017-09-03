@@ -1,10 +1,10 @@
 package eu.lynxworks.balancingact;
 
-import android.icu.text.SimpleDateFormat;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.List;
-import java.util.Date;
 
 class Day {
     /*  Attributes */
@@ -33,7 +33,7 @@ class Day {
 
     /*  Constructor */
     public Day(Date date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             setTheDate(simpleDateFormat.format(date));
         } catch (Exception e) {

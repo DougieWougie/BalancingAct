@@ -1,8 +1,5 @@
 package eu.lynxworks.balancingact;
 
-import android.icu.text.SimpleDateFormat;
-
-import java.util.Date;
 
 /**
  * This class defines a food.
@@ -43,10 +40,8 @@ public class Food {
         private float fibre             = 0;
         private float sugar             = 0;
 
-        public Builder(Date date, String productName, float quantity, float energy){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-            simpleDateFormat.format(date);
-            this.date                   = simpleDateFormat.toString();
+        public Builder(String date, String productName, float quantity, float energy){
+            this.date                   = date;
             this.productName            = productName;
             this.quantity               = quantity;
             this.energy                 = energy;

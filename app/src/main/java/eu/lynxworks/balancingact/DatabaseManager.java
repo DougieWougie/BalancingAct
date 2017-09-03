@@ -5,13 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.icu.text.SimpleDateFormat;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import java.text.ParseException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -131,7 +130,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         private static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + FoodEntry.TABLE + " (" +
                         FoodEntry._ID + "INTEGER PRIMARY KEY," +    // This is the BaseColumns _ID!
-                        FoodEntry.COLUMN_DATE + " TEXT," +
+                        FoodEntry.COLUMN_DATE + " STRING," +
                         FoodEntry.COLUMN_BARCODE + " INTEGER," +
                         FoodEntry.COLUMN_PRODUCTNAME + " TEXT," +
                         FoodEntry.COLUMN_QUANTITY + " REAL," +
@@ -143,6 +142,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                         FoodEntry.COLUMN_FAT + " REAL," +
                         FoodEntry.COLUMN_FIBRE + " REAL," +
                         FoodEntry.COLUMN_SUGAR + " REAL);";
+
         private static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + FoodEntry.TABLE;
 
@@ -188,7 +188,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     /*  Method takes a date, creates a new Day object and saves it to the database. */
     public Day addDay(Date date){
         Day day = new Day(date);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try{
             simpleDateFormat.format(simpleDateFormat.parse(date.toString()));
             SQLiteDatabase db = this.getWritableDatabase();
@@ -242,6 +242,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     /*  Method takes a Food object and stores in the database. */
     public Food addFood(Food food){
+        /*  Thanks to Android using JDK 6/7 and not 8 we have to mess around storing dates as
+            strings.
+         */
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(FoodEntry.COLUMN_DATE, food.getDate());
@@ -335,12 +338,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
           */
         try (Cursor cursor = db.rawQuery(FoodEntry.SQL_SELECT_QUERY, null)) {
             while (cursor.moveToNext()) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-                String dateString = cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_DATE));
-                Date date = simpleDateFormat.parse(dateString);
-
                 Food food = new Food.Builder(
-                    date,
+                    cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_DATE)),
                     cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)),
                     cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_QUANTITY)),
                     cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_ENERGY)))
@@ -355,8 +354,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
                     .build();
                 foods.add(food);
             }
-        } catch (ParseException e) {
-            Log.d("EXCEPTION", "ParseException in DatabaseManager->getAllFood", e);
+        } catch (Exception e) {
+            Log.d("EXCEPTION", "Exception in DatabaseManager->getAllFood", e);
         }
         return foods;
     }
@@ -364,7 +363,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     /*  Method returns a List of Exercise objects representing all the items stored in the
         database.
     */
-    public List<Exercise> getAll() {
+    public List<Exercise> getAllExercise() {
         List<Exercise> exercises = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 

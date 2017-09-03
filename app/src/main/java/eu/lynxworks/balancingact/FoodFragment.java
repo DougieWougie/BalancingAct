@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -73,8 +74,6 @@ public class FoodFragment extends Fragment {
         /*  Event handlers for the various components */
         ImageButton searchButton = (ImageButton) fragmentView.findViewById(R.id.searchButton);
         ImageButton scanButton = (ImageButton) fragmentView.findViewById(R.id.scanButton);
-        Button cancelButton = (Button) fragmentView.findViewById(R.id.foodCancelButton);
-        Button saveButton = (Button) fragmentView.findViewById(R.id.foodSaveButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -350,8 +349,12 @@ public class FoodFragment extends Fragment {
                          */
                         JSONObject nutrition = product.getJSONObject("nutriments");
 
+                        Date today = new Date();
+                        SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+                        String todayString = yearMonthDay.format(today);
+
                         Food food = new Food.Builder(
-                                new Date(),
+                                todayString,
                                 productName,
                                 Float.valueOf(quantity),
                                 Float.valueOf(nutrition.getString("energy_100g")))

@@ -76,9 +76,9 @@ public class ExerciseFragment extends Fragment {
             EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
             EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
             EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
-            if (editExercise.getText().toString().isEmpty() ||
-                editDuration.getText().toString().isEmpty() ||
-                editCalories.getText().toString().isEmpty() )
+            if (!editExercise.getText().toString().isEmpty() &&
+                !editDuration.getText().toString().isEmpty() &&
+                !editCalories.getText().toString().isEmpty() )
             {
                 exercise = new Exercise(editExercise.getText().toString(),
                         Float.parseFloat(editDuration.getText().toString()),
