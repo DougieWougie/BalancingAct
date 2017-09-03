@@ -5,16 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.SimpleDateFormat;
 import android.provider.BaseColumns;
+import android.util.Log;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  *  This class handles all SQLite database actions within the application. In an earlier iteration,
- *  this was achieved by a hnadler for each class however although that was highly cohesive, the
+ *  this was achieved by a handler for each class however although that was highly cohesive, the
  *  low coupling made handling table joining and the functions of relational database poor.
- *  There were also significant overheads as mulitple databse close calls were being made - these
+ *  There were also significant overheads as multiple database close calls were being made - these
  *  have a significant overhead in Android, so now a single manager can be created in MainActivity
  *  allowing us to close the database one time at when that is destroyed.
  */
@@ -33,9 +37,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         private static final String COLUMN_NAME = "name";
         private static final String COLUMN_DURATION = "duration";
         private static final String COLUMN_CALORIES = "calories";
-
-        /*  Foreign key used to join Exercise and the Day that it was done on. */
-        private static final String COLUMN_DAY = "day";
+        private static final String COLUMN_DATE = "date";
 
         /*  SQL statements  */
         private static final String SQL_CREATE_ENTRIES =
@@ -44,14 +46,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
                         ExerciseEntry.COLUMN_NAME + " TEXT," +
                         ExerciseEntry.COLUMN_DURATION + " REAL," +
                         ExerciseEntry.COLUMN_CALORIES + " REAL," +
-                        ExerciseEntry.COLUMN_DAY + " INTEGER);";
+                        ExerciseEntry.COLUMN_DATE + " INTEGER);";
         private static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + ExerciseEntry.TABLE;
         private static final String SQL_SELECT_QUERY =
                 "SELECT * FROM " + ExerciseEntry.TABLE;
-        private static final String SQL_DAY_QUERY =
-                "SELECT * FROM " + ExerciseEntry.TABLE +
-                        "JOIN ";
     }
 
     private class UserEntry implements BaseColumns {
@@ -99,8 +98,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 "CREATE TABLE " + DayEntry.TABLE + " (" +
                         DayEntry._ID + "INTEGER PRIMARY KEY," +    // This is the BaseColumns _ID!
                         DayEntry.COLUMN_DATE + " TEXT," +
-                        DayEntry.COLUMN_CALORIESIN + " REAL," +
-                        DayEntry.COLUMN_CALORIESOUT + " REAL," +
+                        DayEntry.COLUMN_CALORIESIN + " INTEGER," +
+                        DayEntry.COLUMN_CALORIESOUT + " INTEGER," +
                         DayEntry.COLUMN_STEPS + " INTEGER)";
 
         private static final String SQL_DELETE_ENTRIES =
@@ -115,6 +114,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         private static final String TABLE = "food_entry";
 
         /*  Column names */
+        private static final String COLUMN_DATE = "date";
         private static final String COLUMN_BARCODE = "barcode";
         private static final String COLUMN_PRODUCTNAME = "productName";
         private static final String COLUMN_QUANTITY = "quantity";
@@ -131,6 +131,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         private static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + FoodEntry.TABLE + " (" +
                         FoodEntry._ID + "INTEGER PRIMARY KEY," +    // This is the BaseColumns _ID!
+                        FoodEntry.COLUMN_DATE + " TEXT," +
                         FoodEntry.COLUMN_BARCODE + " INTEGER," +
                         FoodEntry.COLUMN_PRODUCTNAME + " TEXT," +
                         FoodEntry.COLUMN_QUANTITY + " REAL," +
@@ -141,7 +142,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                         FoodEntry.COLUMN_PROTEIN + " REAL," +
                         FoodEntry.COLUMN_FAT + " REAL," +
                         FoodEntry.COLUMN_FIBRE + " REAL," +
-                        FoodEntry.COLUMN_SUGAR + " REAL)";
+                        FoodEntry.COLUMN_SUGAR + " REAL);";
         private static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + FoodEntry.TABLE;
 
@@ -184,10 +185,66 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(FoodEntry.SQL_DELETE_ENTRIES);
     }
 
+    /*  Method takes a date, creates a new Day object and saves it to the database. */
+    public Day addDay(Date date){
+        Day day = new Day(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        try{
+            simpleDateFormat.format(simpleDateFormat.parse(date.toString()));
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(DayEntry.COLUMN_DATE, simpleDateFormat.toString());
+            db.insert(FoodEntry.TABLE, null, values);
+            db.close();
+        }
+        catch (Exception e){
+            Log.d("EXCEPTION", "Thrown in DatabaseManager->addDay", e);
+        }
+        return day;
+    }
+
+    /*  Method takes a date and returns the corresponding Day entry in the database. */
+    public void saveDay(Day day){
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(DayEntry.COLUMN_DATE, day.getTheDate());
+            values.put(DayEntry.COLUMN_CALORIESIN, day.getCaloriesIn());
+            values.put(DayEntry.COLUMN_CALORIESOUT, day.getCaloriesOut());
+            values.put(DayEntry.COLUMN_STEPS, day.getSteps());
+            db.replace(DayEntry.TABLE, null, values);
+            db.close();
+        }
+        catch (Exception e){
+            Log.d("EXCEPTION", "Thrown in DatabaseManager->saveDay", e);
+        }
+    }
+
+    /*  Method takes a date and returns the corresponding Day entry in the database. */
+    public Day getDay(Date date){
+        Day day = new Day(date);
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(DayEntry.SQL_SELECT_QUERY, null);
+            while(cursor.moveToNext()){
+                day.setTheDate(cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)));
+                day.setCaloriesIn(cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)));
+                day.setCaloriesIn(cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)));
+                day.setSteps(cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_STEPS)));
+            }
+            db.close();
+        }
+        catch (Exception e){
+            Log.d("EXCEPTION", "Thrown in DatabaseManager->addDay", e);
+        }
+        return day;
+    }
+
     /*  Method takes a Food object and stores in the database. */
     public Food addFood(Food food){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(FoodEntry.COLUMN_DATE, food.getDate());
         values.put(FoodEntry.COLUMN_BARCODE, food.getBarcode());
         values.put(FoodEntry.COLUMN_PRODUCTNAME, food.getProductName());
         values.put(FoodEntry.COLUMN_QUANTITY, food.getQuantity());
@@ -213,6 +270,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(ExerciseEntry.COLUMN_NAME, exercise.getName());
         values.put(ExerciseEntry.COLUMN_DURATION, exercise.getDuration());
         values.put(ExerciseEntry.COLUMN_CALORIES, exercise.getCalories());
+        values.put(ExerciseEntry.COLUMN_DATE, exercise.getDay());
         db.insert(ExerciseEntry.TABLE, null, values);
         db.close();
         return exercise;
@@ -250,6 +308,18 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
     }
 
+//    public Cursor getDay() {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        try{
+//            Cursor cursor = db.rawQuery(DayEntry.SQL_SELECT_QUERY, null);
+//            return cursor;
+//        }
+//        catch (Exception e){
+//            Log.d("Dougie", "Exception thrown in DatabaseManager getDay()", e);
+//        }
+//        return null;
+//    }
+
     /*  Method returns a List of Food objects representing all the items stored in the
         database.
     */
@@ -265,21 +335,28 @@ public class DatabaseManager extends SQLiteOpenHelper {
           */
         try (Cursor cursor = db.rawQuery(FoodEntry.SQL_SELECT_QUERY, null)) {
             while (cursor.moveToNext()) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                String dateString = cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_DATE));
+                Date date = simpleDateFormat.parse(dateString);
+
                 Food food = new Food.Builder(
-                        cursor.getString(2),
-                        cursor.getFloat(3),
-                        cursor.getFloat(6))
-                        .barcode(cursor.getLong(1))
-                        .brand(cursor.getString(4))
-                        .salt(cursor.getFloat(5))
-                        .carbohydrate(cursor.getFloat(7))
-                        .protein(cursor.getFloat(8))
-                        .fat(cursor.getFloat(9))
-                        .fibre(cursor.getFloat(10))
-                        .sugar(cursor.getFloat(11))
-                        .build();
+                    date,
+                    cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)),
+                    cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_QUANTITY)),
+                    cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_ENERGY)))
+                    .barcode(cursor.getLong(cursor.getColumnIndex(FoodEntry.COLUMN_BARCODE)))
+                    .brand(cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_BRAND)))
+                    .salt(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_SALT)))
+                    .carbohydrate(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_CARBOHYDRATE)))
+                    .protein(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)))
+                    .fat(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_FAT)))
+                    .fibre(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_FIBRE)))
+                    .sugar(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_SUGAR)))
+                    .build();
                 foods.add(food);
             }
+        } catch (ParseException e) {
+            Log.d("EXCEPTION", "ParseException in DatabaseManager->getAllFood", e);
         }
         return foods;
     }
@@ -304,7 +381,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_NAME)),
                     cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_DURATION)),
                     cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_CALORIES)),
-                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_DAY)));
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_DATE)));
             exercises.add(exercise);
         }
         cursor.close();

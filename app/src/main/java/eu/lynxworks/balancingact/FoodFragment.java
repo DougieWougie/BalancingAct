@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -130,7 +132,7 @@ public class FoodFragment extends Fragment {
                 txt_fiber.setText(String.format(Locale.getDefault(), "%.1f", food.getFibre()));
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.d("EXCEPTION", "In FoodFragment->upDateDisplay()", e);
             }
 
             try {
@@ -150,7 +152,7 @@ public class FoodFragment extends Fragment {
                 txt_fiber.setText(String.format(Locale.getDefault(), "%.1f", food.getFibre() * food.getQuantity() / units));
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.d("EXCEPTION", "In FoodFragment->upDateDisplay()", e);
             }
         }
     }
@@ -179,7 +181,7 @@ public class FoodFragment extends Fragment {
             txt_fat.setText(blank);
             txt_fiber.setText(blank);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("EXCEPTION", "In FoodFragment->clearDisplay()", e);
         }
         try {
             TextView txt_energy = (TextView) getView().findViewById(R.id.txt_energy);
@@ -198,7 +200,7 @@ public class FoodFragment extends Fragment {
             txt_fiber.setText(R.string.blank);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("EXCEPTION", "In FoodFragment->clearDisplay()", e);
         }
     }
 
@@ -263,7 +265,7 @@ public class FoodFragment extends Fragment {
                     }
                 });
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.d("EXCEPTION", "In FoodFragment->onPostExecute()", e);
             }
         }
 
@@ -348,7 +350,8 @@ public class FoodFragment extends Fragment {
                          */
                         JSONObject nutrition = product.getJSONObject("nutriments");
 
-                        return new Food.Builder(
+                        Food food = new Food.Builder(
+                                new Date(),
                                 productName,
                                 Float.valueOf(quantity),
                                 Float.valueOf(nutrition.getString("energy_100g")))
@@ -361,19 +364,20 @@ public class FoodFragment extends Fragment {
                                 .fibre(Float.valueOf((nutrition.getString("fiber_100g"))))
                                 .sugar(Float.valueOf((nutrition.getString("sugars_100g"))))
                                 .build();
+                        return food;
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.d("EXCEPTION", "Parsing the JSON response in searchBarcode()", e);
                     }
                 }
                 return null;
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.d("EXCEPTION", "IOException in searchBarcode()", e);
             } finally {
                 if (anURLConnection != null) {
                     try {
                         bufferedReader.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.d("EXCEPTION", "IOException in searchBarcode()", e);
                     }
                 }
             }

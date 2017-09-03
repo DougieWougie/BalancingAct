@@ -9,37 +9,36 @@ import java.util.Date;
 class Day {
     /*  Attributes */
     private String theDate;
+    private int caloriesIn;
+    private int caloriesOut;
     private List<Exercise> exercises;
     private List<Food> foods;
     private int steps;
 
     /*  Getters */
-    private String getTheDate()              { return this.theDate; }
-    private List<Exercise> getExercises()    { return this.exercises; }
-    private List<Food> getFoods()            { return this.foods; }
-    public int getSteps()                    { return this.steps; }
+    public String getTheDate()                          { return this.theDate; }
+    public int getCaloriesIn()                          { return this.caloriesIn; }
+    public int getCaloriesOut()                         { return this.caloriesOut; }
+    public List<Exercise> getExercises()                { return this.exercises; }
+    public List<Food> getFoods()                        { return this.foods; }
+    public int getSteps()                               { return this.steps; }
 
     /*  Setters */
-    public void setTheDate(Date date) {
+    public void setTheDate(String date)                 { this.theDate = date; }
+    public void setCaloriesIn(int calories)             { this.caloriesIn = calories; }
+    public void setCaloriesOut(int calories)            { this.caloriesOut = calories; }
+    public void setExercises(List<Exercise> exercises)  { this.exercises = exercises; }
+    public void setFoods(List<Food> foods)              { this.foods = foods; }
+    public void setSteps(int steps)                     { this.steps = steps; }
+
+    /*  Constructor */
+    public Day(Date date){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         try {
-            this.theDate = simpleDateFormat.format(simpleDateFormat.parse(date.toString()));
+            setTheDate(simpleDateFormat.format(date));
         } catch (Exception e) {
             Log.d("Dougie", "Exception in ", e);
         }
-    }
-
-    public void setExercises(List<Exercise> exercises) {
-        this.exercises = exercises;
-    }
-
-    public void setFoods(List<Food> foods) {
-        this.foods = foods;
-    }
-
-    /*  TODO: Setter for the daily step counter. */
-    public void setSteps(){
-
     }
 
     public void addExercise(Exercise exercise) {

@@ -1,5 +1,10 @@
 package eu.lynxworks.balancingact;
 
+import android.icu.text.SimpleDateFormat;
+import android.util.Log;
+
+import java.util.Date;
+
 /**
  * Exercise class
  * - Defines an exercise.
@@ -33,7 +38,14 @@ class Exercise {
         setName(name);
         setDuration(duration);
         setCalories(calories);
-        setDay(null);
+        try {
+        Date today = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            setDay(simpleDateFormat.format(simpleDateFormat.parse(today.toString())));
+        } catch (Exception e) {
+            setDay(null);
+            Log.d("Dougie", "Exception creating a date for use in an Exercise constructor ", e);
+        }
     }
 
     public Exercise(String name, float duration, float calories, String day){

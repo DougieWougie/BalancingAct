@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Date;
 
 
 /**
  * This fragment is used to record home entries.
  */
 public class HomeFragment extends Fragment {
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -53,16 +55,39 @@ public class HomeFragment extends Fragment {
         RecyclerView.Adapter adapter = new DayAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
+        /*  If this is the first time the application has been launched today then we create a
+            new Day and save it to the database. Checking for today's entry confirms first use. As
+            with any database activity, there is always a risk of an exception and we use the
+            usual method of catching exceptions to the Log with a tag.
+         */
+
+//        TextView textView = (TextView) view.findViewById(R.id.homeText);
+//        textView.setText(today.toString());
+
         return view;
     }
 
+    private Day createDay() {
+        Day day = null;
+        try {
+            DatabaseManager dbManager = new DatabaseManager(getContext());
+            day = dbManager.getDay(new Date());
+            if(day==null){
+                dbManager.saveDay(new Day(new Date()));
+            }
+        } catch (Exception e) {
+            Log.d("Dougie", "Exception in ", e);
+        }
+        return day;
+    }
+
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
     }
 
     @Override
-    public void onDetach(){
+    public void onDetach() {
         super.onDetach();
     }
 }

@@ -1,11 +1,16 @@
 package eu.lynxworks.balancingact;
 
+import android.icu.text.SimpleDateFormat;
+
+import java.util.Date;
+
 /**
  * This class defines a food.
  */
 
 public class Food {
-    // Attributes of a "food" item
+    /*  Attributes of a "food" item */
+    private final String date;
     private final long barcode;
     private final String productName;
     private final float quantity;
@@ -22,12 +27,13 @@ public class Food {
         constructor problem, a "builder" design pattern is used.
      */
     public static class Builder {
-        // Required parameters
+        /*  Required parameters */
+        private final String date;
         private final String productName;
         private final float quantity;
         private final float energy;
 
-        // Optional parameters set to default values
+        /*  Optional parameters set to default values */
         private long barcode            = 0;
         private String brand            = "";
         private float salt              = 0;
@@ -37,7 +43,10 @@ public class Food {
         private float fibre             = 0;
         private float sugar             = 0;
 
-        public Builder(String productName, float quantity, float energy){
+        public Builder(Date date, String productName, float quantity, float energy){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            simpleDateFormat.format(date);
+            this.date                   = simpleDateFormat.toString();
             this.productName            = productName;
             this.quantity               = quantity;
             this.energy                 = energy;
@@ -58,6 +67,7 @@ public class Food {
     }
 
     private Food(Builder builder) {
+        this.date            = builder.date;
         this.barcode         = builder.barcode;
         this.productName     = builder.productName;
         this.quantity        = builder.quantity;
@@ -71,18 +81,19 @@ public class Food {
         this.sugar           = builder.sugar;
     }
 
-    // Getter methods are required for populating the SQLite database.
-    public long getBarcode()        { return barcode; }
-    public String getProductName()  { return productName; }
-    public float getQuantity()      { return quantity; }
-    public String getBrand()        { return brand; }
-    public float getSalt()          { return salt; }
-    public float getEnergy()        { return energy; }
-    public float getCarbohydrate()  { return carbohydrate; }
-    public float getProtein()       { return protein; }
-    public float getFat()           { return fat; }
-    public float getFibre()         { return fibre; }
-    public float getSugar()         { return sugar; }
+    /*  Getter methods are required for populating the SQLite database. */
+    public String getDate()         { return this.date; }
+    public long getBarcode()        { return this.barcode; }
+    public String getProductName()  { return this.productName; }
+    public float getQuantity()      { return this.quantity; }
+    public String getBrand()        { return this.brand; }
+    public float getSalt()          { return this.salt; }
+    public float getEnergy()        { return this.energy; }
+    public float getCarbohydrate()  { return this.carbohydrate; }
+    public float getProtein()       { return this.protein; }
+    public float getFat()           { return this.fat; }
+    public float getFibre()         { return this.fibre; }
+    public float getSugar()         { return this.sugar; }
 
     /*  Over riding toString is a technique advised in Effective Java 2nd edition
         by Joshua Bloch. The superclass returns a fairly unhelpful hashcode representing
@@ -90,7 +101,8 @@ public class Food {
      */
     @Override
     public String toString(){
-        return getBarcode() + " / " +
+        return  getDate() + " / " +
+                getBarcode() + " / " +
                 getProductName() + " / " +
                 getQuantity() + " / " +
                 getBrand() + " / " +
