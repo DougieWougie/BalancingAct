@@ -38,7 +38,7 @@
     <string name="label_exercise">Exercise</string>
     <string name="label_duration">Duration (minutes)</string>
     <string name="label_calories">Calories (kcal)</string>
-    <string name="label_user_activity">Activity level (4 is highest)</string>
+    <string name="label_user_activity">How often do you exercise?</string>
     <string name="label_user_weight">Weight (kg)</string>
     <string name="label_user_height">Height (cm)</string>
     <string name="label_user_age">Age</string>
@@ -53,4 +53,8 @@
     <string name="card_food_image">Food</string>
     <string name="card_exercise_image">Exercise</string>
     <string name="warning_exercise">You must fill in all fields!</string>
+    <string name="active_sedentary">Never</string>
+    <string name="active_moderate">Weekly</string>
+    <string name="active_active">Often</string>
+    <string name="active_extreme">Daily</string>
 </resources>

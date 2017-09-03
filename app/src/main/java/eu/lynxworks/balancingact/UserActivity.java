@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RatingBar;
 
 import java.util.List;
 import java.util.Locale;
@@ -103,7 +102,7 @@ public class UserActivity extends AppCompatActivity {
         EditText age = (EditText) findViewById(R.id.editUserAge);
         EditText height = (EditText) findViewById(R.id.editUserHeight);
         EditText weight = (EditText) findViewById(R.id.editUserWeight);
-        RatingBar activity = (RatingBar) findViewById(R.id.ratingUserActivity);
+        RadioGroup activityGroup = (RadioGroup) findViewById(R.id.radioActivity);
         RadioGroup sex = (RadioGroup) findViewById(R.id.radioUserSex);
         /*  Try catch is used because there are so many type conversions going on that
             it is extremely easy to build in difficult to trace bugs.
@@ -113,12 +112,27 @@ public class UserActivity extends AppCompatActivity {
             age.setText(String.format(Locale.getDefault(), "%d", getTheUser().getAge()));
             height.setText(String.format(Locale.getDefault(), "%.1f", getTheUser().getHeight()));
             weight.setText(String.format(Locale.getDefault(), "%.1f", getTheUser().getWeight()));
-            activity.setNumStars(getTheUser().getActivityLevel());
             if(Objects.equals(getTheUser().getSex(), "Male")){
                 sex.check(R.id.radioUserMale);
             }
             else {
                 sex.check(R.id.radioUserFemale);
+            }
+            switch(getTheUser().getActivityLevel()){
+                case(1):
+                    activityGroup.check(R.id.radioActivity1);
+                    break;
+                case(2):
+                    activityGroup.check(R.id.radioActivity2);
+                    break;
+                case(3):
+                    activityGroup.check(R.id.radioActivity3);
+                    break;
+                case(4):
+                    activityGroup.check(R.id.radioActivity4);
+                    break;
+                default:
+                    activityGroup.check(R.id.radioActivity1);
             }
         }
         catch (Exception e){
@@ -134,8 +148,11 @@ public class UserActivity extends AppCompatActivity {
         EditText weight = (EditText) findViewById(R.id.editUserWeight);
         RadioGroup sexGroup = (RadioGroup) findViewById(R.id.radioUserSex);
         RadioButton sexRadio = (RadioButton) findViewById(sexGroup.getCheckedRadioButtonId());
-        RatingBar activity = (RatingBar) findViewById(R.id.ratingUserActivity);
+        RadioGroup activityGroup = (RadioGroup) findViewById(R.id.radioActivity);
+        RadioButton activityRadio = (RadioButton) findViewById(activityGroup.getCheckedRadioButtonId());
+
         String sex = (String) sexRadio.getText();
+        int activityLevel = 1;
 
         if (name.getText().toString().isEmpty() ||
                 age.getText().toString().isEmpty() ||
@@ -146,12 +163,27 @@ public class UserActivity extends AppCompatActivity {
             snackbar.show();
             return false;
         }
+
+        switch(activityGroup.getCheckedRadioButtonId()){
+            case(R.id.radioActivity1):
+                activityLevel=1;
+                break;
+            case(R.id.radioActivity2):
+                activityLevel=2;
+                break;
+            case(R.id.radioActivity3):
+                activityLevel=3;
+                break;
+            case(R.id.radioActivity4):
+                activityLevel=4;
+                break;
+        }
         setTheUser(new User(name.getText().toString(),
                             Integer.parseInt(age.getText().toString()),
                             Float.valueOf(height.getText().toString()),
                             Float.valueOf(weight.getText().toString()),
                             sex,
-                            activity.getNumStars()));
+                            activityLevel));
         return true;
     }
 
