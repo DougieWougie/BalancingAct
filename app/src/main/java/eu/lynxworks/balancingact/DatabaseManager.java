@@ -360,6 +360,47 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return foods;
     }
 
+    /*  Method returns a List of Food objects representing all the items stored in the
+        database for a specific day.
+    */
+    public List<Food> getDayFood(String date) {
+        List<Food> foods = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
+            to a useful format (in this case a Food Object). Cursor Objects are initialised at
+            index -1, which allows us to use the moveToNext() method in a while loop.
+
+            Try/Finally is replaceable with automatic resource management.
+          */
+        String SQL_QUERY = FoodEntry.SQL_SELECT_QUERY + " WHERE "
+                + FoodEntry.COLUMN_DATE + "='" + date + "';";
+
+        try (Cursor cursor = db.rawQuery(SQL_QUERY, null)) {
+            while (cursor.moveToNext()) {
+                Food food = new Food.Builder(
+                        cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_DATE)),
+                        cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)),
+                        cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_QUANTITY)),
+                        cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_ENERGY)))
+                        .barcode(cursor.getLong(cursor.getColumnIndex(FoodEntry.COLUMN_BARCODE)))
+                        .brand(cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_BRAND)))
+                        .salt(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_SALT)))
+                        .carbohydrate(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_CARBOHYDRATE)))
+                        .protein(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)))
+                        .fat(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_FAT)))
+                        .fibre(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_FIBRE)))
+                        .sugar(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_SUGAR)))
+                        .build();
+                foods.add(food);
+            }
+        } catch (Exception e) {
+            Log.d("EXCEPTION", "Exception in DatabaseManager->getAllFood", e);
+        }
+        return foods;
+    }
+
+
     /*  Method returns a List of Exercise objects representing all the items stored in the
         database.
     */
@@ -386,6 +427,38 @@ public class DatabaseManager extends SQLiteOpenHelper {
         cursor.close();
         return exercises;
     }
+
+    /*  Method returns a List of Exercise objects representing all the items stored in the
+    database.
+*/
+    public List<Exercise> getDayExercise(String date) {
+        List<Exercise> exercises = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /*  SQLite database return SQL queries as Cursor Objects. This needs to be adapted
+            to a useful format (in this case a Food Object). Cursor Objects are initialised at
+            index -1, which allows us to use the moveToNext() method in a while loop.
+
+            Cursor access is troublesome, so we utilise the getString with getColumnIndex - this
+            prevents accessing the wrong field.
+          */
+
+        String theQuery = ExerciseEntry.SQL_SELECT_QUERY + " WHERE "
+                + ExerciseEntry.COLUMN_DATE + "='" + date + "';";
+
+        Cursor cursor = db.rawQuery(theQuery, null);
+        while (cursor.moveToNext()){
+            Exercise exercise = new Exercise(
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_NAME)),
+                    cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_DURATION)),
+                    cursor.getFloat(cursor.getColumnIndex(ExerciseEntry.COLUMN_CALORIES)),
+                    cursor.getString(cursor.getColumnIndex(ExerciseEntry.COLUMN_DATE)));
+            exercises.add(exercise);
+        }
+        cursor.close();
+        return exercises;
+    }
+
     /*  Method returns true if the table is empty or false if there is a row. */
     public boolean isUserEmpty() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -398,8 +471,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /*  Method returns a List of User objects representing all the items stored in the
-    database.
- */
+        database.
+    */
     public List<User> getAllUser() {
         List<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

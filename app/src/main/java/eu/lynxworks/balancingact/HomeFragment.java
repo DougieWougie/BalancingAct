@@ -67,6 +67,8 @@ public class HomeFragment extends Fragment {
 //        TextView textView = (TextView) view.findViewById(R.id.homeText);
 //        textView.setText(today.toString());
 
+        final String testDate = "2017-09-03";
+
         EditText editText = (EditText) view.findViewById(R.id.editText);
         Button button = (Button) view.findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +76,9 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 DatabaseManager dbManager = new DatabaseManager(getContext());
                 List<Exercise> exercises = dbManager.getAllExercise();
+                List<Exercise> exercisesOnDay = dbManager.getDayExercise(testDate);
                 List<Food> foods = dbManager.getAllFood();
+                List<Food> foodsOnDay = dbManager.getDayFood(testDate);
             }
         });
 
