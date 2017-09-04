@@ -22,7 +22,7 @@ import java.util.List;
  *  allowing us to close the database one time at when that is destroyed.
  */
 
-public class DatabaseManager extends SQLiteOpenHelper {
+class DatabaseManager extends SQLiteOpenHelper {
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
         an object as a specific table. It also implements the BaseColumns interface which provides
         access to th _ID  field, an auto incremented integer value that uniquely identifies each row

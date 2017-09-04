@@ -39,13 +39,13 @@ public class UserActivity extends AppCompatActivity {
 
         dbManager = new DatabaseManager(getApplicationContext());
 
-        try {
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        /*  A null pointer exception is possible when setting HomeAsUpEnabled
+            this condition checks for it.
+         */
+        if(getSupportActionBar()!=null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        catch (Exception e){
-            Log.d("Dougie", "setDisplayHomeUpAsEnabled threw an exception", e);
         }
 
         Button save = (Button) findViewById(R.id.userSaveButton);
@@ -149,7 +149,6 @@ public class UserActivity extends AppCompatActivity {
         RadioGroup sexGroup = (RadioGroup) findViewById(R.id.radioUserSex);
         RadioButton sexRadio = (RadioButton) findViewById(sexGroup.getCheckedRadioButtonId());
         RadioGroup activityGroup = (RadioGroup) findViewById(R.id.radioActivity);
-        RadioButton activityRadio = (RadioButton) findViewById(activityGroup.getCheckedRadioButtonId());
 
         String sex = (String) sexRadio.getText();
         int activityLevel = 1;

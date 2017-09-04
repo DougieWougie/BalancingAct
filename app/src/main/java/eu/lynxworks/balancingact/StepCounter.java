@@ -41,11 +41,11 @@ public class StepCounter extends AppCompatActivity implements SensorEventListene
 
     }
 
-    public String updateDisplay(){
+    private String updateDisplay(){
         return (STEP_COUNT + " steps or " + convertStepsMiles() + " miles.");
     }
 
-    public String convertStepsMiles() {
+    private String convertStepsMiles() {
         // Assuming a stride length of 2 1/2 feet, 1 step is 0.0005 miles.
         double distance = 0.0005;
         distance = STEP_COUNT * distance;

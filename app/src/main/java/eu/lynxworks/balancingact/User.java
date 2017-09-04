@@ -18,12 +18,6 @@ class User {
     private String sex;         // male or female
     private int activityLevel;  // 1-4 relates to exercise and defined below
 
-    /*  Activity levels (see above) */
-    private static final int ACTIVE_SEDENTARY   = 1;
-    private static final int ACTIVE_MODERATE    = 2;
-    private static final int ACTIVE_ACTIVE      = 3;
-    private static final int ACTIVE_EXTREME     = 4;
-
     /*  Getters */
     public String getName()         { return this.name; }
     public int getAge()             { return this.age; }

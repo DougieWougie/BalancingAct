@@ -20,17 +20,17 @@ class Day {
     public String getTheDate()                          { return this.theDate; }
     public int getCaloriesIn()                          { return this.caloriesIn; }
     public int getCaloriesOut()                         { return this.caloriesOut; }
-    public List<Exercise> getExercises()                { return this.exercises; }
-    public List<Food> getFoods()                        { return this.foods; }
+    private List<Exercise> getExercises()                { return this.exercises; }
+    private List<Food> getFoods()                        { return this.foods; }
     public int getSteps()                               { return this.steps; }
 
     /*  Setters */
-    public void setTheDate(String date)                 { this.theDate = date; }
-    public void setCaloriesIn(int calories)             { this.caloriesIn = calories; }
-    public void setCaloriesOut(int calories)            { this.caloriesOut = calories; }
-    public void setExercises(List<Exercise> exercises)  { this.exercises = exercises; }
-    public void setFoods(List<Food> foods)              { this.foods = foods; }
-    public void setSteps(int steps)                     { this.steps = steps; }
+    private void setTheDate(String date)                 { this.theDate = date; }
+    private void setCaloriesIn(int calories)             { this.caloriesIn = calories; }
+    private void setCaloriesOut(int calories)            { this.caloriesOut = calories; }
+    private void setExercises(List<Exercise> exercises)  { this.exercises = exercises; }
+    private void setFoods(List<Food> foods)              { this.foods = foods; }
+    private void setSteps(int steps)                     { this.steps = steps; }
 
     /*  Constructor used when creating a new Day. */
     public Day(Date date){
