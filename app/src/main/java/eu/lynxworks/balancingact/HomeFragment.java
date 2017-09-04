@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment {
          */
         if (today==null) {
             try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String theDate = simpleDateFormat.format(new Date());
                 DatabaseManager dbManager = new DatabaseManager(getContext());
                 today = dbManager.getDayIfExists(theDate);
@@ -81,8 +82,8 @@ public class HomeFragment extends Fragment {
         }
 
         /*  The date is updated only when we know it! */
-        SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat longDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy");
+        SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat longDateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault());
         try {
             Date aDate = shortDateFormat.parse(today.getTheDate());
 
