@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +83,23 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
+    public void calculateAndDisplayStatistics(){
+        int bmi = (int) this.getTheUser().getBMI();
+        int bmr = (int) this.getTheUser().getBMR();
+
+        TextView textBmi = (TextView) findViewById(R.id.textUserBMI);
+        TextView labelBmi = (TextView) findViewById(R.id.labelUserBMI);
+        TextView textBmr = (TextView) findViewById(R.id.textUserBMR);
+        TextView labelBmr = (TextView) findViewById(R.id.labelUserBMR);
+        textBmi.setVisibility(View.VISIBLE);
+        textBmr.setVisibility(View.VISIBLE);
+        labelBmi.setVisibility(View.VISIBLE);
+        labelBmr.setVisibility(View.VISIBLE);
+
+        textBmi.setText(String.valueOf(bmi));
+        textBmr.setText(String.valueOf(bmr));
+    }
+
     /*  This function responds to the user clicking the back button on the
         toolbar to go back up to the parent activity.
      */
@@ -134,6 +152,7 @@ public class UserActivity extends AppCompatActivity {
                 default:
                     activityGroup.check(R.id.radioActivity1);
             }
+            calculateAndDisplayStatistics();
         }
         catch (Exception e){
             Log.d("Dougie", "Exception in populateDisplay", e);

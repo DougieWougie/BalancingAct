@@ -3,9 +3,11 @@ package eu.lynxworks.balancingact;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,15 +52,40 @@ public class HomeFragment extends Fragment {
             2. Select an adapter (the adapter pattern is used to bind
                different information).
          */
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_home);
         /*  If content doesn't get resized (which it doesn't in this app) then this
             optimisation improves performance.
          */
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapter = new DayAdapter(getContext());
+        final RecyclerView.Adapter adapter = new DayAdapter(getContext());
         recyclerView.setAdapter(adapter);
+
+        /*  An ItemTouchHelper allows the use of swiping cards and associating event handling.
+            TODO: Add card swiping.
+        */
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper
+                .SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
+        {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int adapterPosition = viewHolder.getAdapterPosition();
+                if(direction == ItemTouchHelper.LEFT) {
+                    Snackbar snackbar= Snackbar.make(recyclerView,"test",Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("Undo", new undoListener());
+                    snackbar.show();
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         /*  If this is the first time the application has been launched today then we create a
             new Day and save it to the database. Checking for today's entry confirms first use. As
@@ -99,6 +126,13 @@ public class HomeFragment extends Fragment {
         today.update(getContext());
 
         return view;
+    }
+
+    public class undoListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view){
+
+        }
     }
 
     @Override

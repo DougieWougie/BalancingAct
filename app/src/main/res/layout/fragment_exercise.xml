@@ -1,130 +1,84 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="eu.lynxworks.balancingact.ExerciseFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/exerciseCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintRight_toLeftOf="@+id/exerciseSaveButton"
+        android:layout_marginRight="8dp" />
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <Button
+        android:id="@+id/exerciseSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/labelExercise"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp">
+            android:labelFor="@+id/editExercise"
+            android:text="@string/label_exercise" />
 
-            <TextView
-                android:id="@+id/labelExercise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:labelFor="@+id/editExercise"
-                android:text="@string/label_exercise"
-                app:layout_constraintLeft_toLeftOf="@+id/editExercise"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editExercise"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="@string/blank"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelExercise" />
-
-            <TextView
-                android:id="@+id/labelDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:labelFor="@+id/editDuration"
-                android:text="@string/label_duration"
-                app:layout_constraintLeft_toLeftOf="@+id/editDuration"
-                app:layout_constraintTop_toBottomOf="@+id/editExercise" />
-
-            <EditText
-                android:id="@+id/editDuration"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:ems="10"
-                android:inputType="number"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDuration" />
-
-            <TextView
-                android:id="@+id/labelCalories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:labelFor="@+id/editCalories"
-                android:text="@string/label_calories"
-                app:layout_constraintLeft_toLeftOf="@+id/editCalories"
-                app:layout_constraintTop_toBottomOf="@+id/editDuration" />
-
-            <EditText
-                android:id="@+id/editCalories"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:ems="10"
-                android:inputType="number"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelCalories" />
-
-        </android.support.constraint.ConstraintLayout>
-
-        <Button
-            android:id="@+id/exerciseSaveButton"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editExercise"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp" />
+            android:inputType="textPersonName"
+            android:text="@string/blank" />
 
-        <Button
-            android:id="@+id/exerciseCancelButton"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/labelCalories"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/cancel"
-            app:layout_constraintRight_toLeftOf="@+id/exerciseSaveButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp" />
+            android:labelFor="@+id/editCalories"
+            android:text="@string/label_calories" />
 
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+        <EditText
+            android:id="@+id/editCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editDuration"
+            android:text="@string/label_duration" />
+
+        <EditText
+            android:id="@+id/editDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

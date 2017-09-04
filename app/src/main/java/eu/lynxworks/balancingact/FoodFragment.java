@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -233,6 +234,8 @@ public class FoodFragment extends Fragment {
             try {
                 final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
                 final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
+                final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
+                table.setVisibility(View.VISIBLE);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -257,6 +260,7 @@ public class FoodFragment extends Fragment {
                             and hide the buttons. A snackbar is used to give the user feedback.
                         */
                         clearDisplay();
+                        table.setVisibility(View.INVISIBLE);
                         saveButton.setVisibility(View.INVISIBLE);
                         cancelButton.setVisibility(View.INVISIBLE);
                         Snackbar snackbar = Snackbar.make(view, R.string.cancelled, Snackbar.LENGTH_SHORT);

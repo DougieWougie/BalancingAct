@@ -43,13 +43,11 @@
     <string name="label_user_height">Height (cm)</string>
     <string name="label_user_age">Age</string>
     <string name="label_user_name">Name</string>
-    <string name="user_activity_title">Update user details</string>
+    <string name="user_activity_title">User details</string>
     <string name="fill_all_notification">All fields are required!</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="bmi">BMI</string>
-    <string name="bmr">BMR</string>
-    <string name="card_label_total">Calorie balance</string>
+    <string name="card_label_total">Calories left</string>
     <string name="card_food_image">Food</string>
     <string name="card_exercise_image">Exercise</string>
     <string name="warning_exercise">You must fill in all fields!</string>
@@ -57,4 +55,8 @@
     <string name="active_moderate">Weekly</string>
     <string name="active_active">Often</string>
     <string name="active_extreme">Daily</string>
+    <string name="date">Date</string>
+    <string name="label_user_bmi">Body Mass Index</string>
+    <string name="label_user_bmr">Basal Metabolic Rate</string>
+    <string name="bmr">BMR</string>
 </resources>
