@@ -1,9 +1,10 @@
 package eu.lynxworks.balancingact;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 class Day {
@@ -31,7 +32,7 @@ class Day {
     public void setFoods(List<Food> foods)              { this.foods = foods; }
     public void setSteps(int steps)                     { this.steps = steps; }
 
-    /*  Constructor */
+    /*  Constructor used when creating a new Day. */
     public Day(Date date){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -39,37 +40,47 @@ class Day {
         } catch (Exception e) {
             Log.d("Dougie", "Exception in ", e);
         }
+        setCaloriesIn(0);
+        setCaloriesOut(0);
+        setSteps(0);
     }
 
-    public void addExercise(Exercise exercise) {
-        this.exercises.add(exercise);
+    /*  Constructor that takes more parameters - used mainly to recreate objects from
+        database managers.
+     */
+    public Day(String date, int caloriesIn, int caloriesOut, int steps){
+        setTheDate(date);
+        setCaloriesIn(caloriesIn);
+        setCaloriesOut(caloriesOut);
+        setSteps(steps);
     }
 
-    public void addFood(Food food) {
-        this.foods.add(food);
-    }
-
-    public void removeExercise(Exercise exercise){
-        this.exercises.remove(exercise);
-    }
-
-    public void removeFood(Food food){
-        this.foods.remove(food);
+    public void update(Context context){
+        try {
+            DatabaseManager dbManager = new DatabaseManager(context);
+            setExercises(dbManager.getDayExercise(getTheDate()));
+            setFoods(dbManager.getDayFood(getTheDate()));
+        }
+        catch (Exception e){
+            Log.d("EXCEPTION", "Thrown in Day->update()", e);
+        }
+        setCaloriesIn(caloriesConsumed());
+        setCaloriesOut(caloriesExpended());
     }
 
     /*  The next two methods iterate through the associated data and total the amount
         of calories consumed and expended.
      */
-    private float caloriesConsumed(){
-        float totalCalories = 0f;
+    private int caloriesConsumed(){
+        int totalCalories = 0;
         for(Food food:getFoods()){
             totalCalories += food.getEnergy();
         }
         return totalCalories;
     }
 
-    private float caloriesExpended(){
-        float totalCalories = 0f;
+    private int caloriesExpended(){
+        int totalCalories = 0;
         for(Exercise exercise:getExercises()){
             totalCalories += exercise.getCalories();
         }

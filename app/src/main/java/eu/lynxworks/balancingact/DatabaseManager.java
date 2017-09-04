@@ -183,6 +183,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(UserEntry.SQL_DELETE_ENTRIES);
         db.execSQL(DayEntry.SQL_DELETE_ENTRIES);
         db.execSQL(FoodEntry.SQL_DELETE_ENTRIES);
+        db.close();
     }
 
     /*  Method takes a date, creates a new Day object and saves it to the database. */
@@ -221,21 +222,46 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /*  Method takes a date and returns the corresponding Day entry in the database. */
-    public Day getDay(Date date){
-        Day day = new Day(date);
+    public List<Day> getAllDays(){
+        List<Day> days= new ArrayList<>();
         try{
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(DayEntry.SQL_SELECT_QUERY, null);
             while(cursor.moveToNext()){
-                day.setTheDate(cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)));
-                day.setCaloriesIn(cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)));
-                day.setCaloriesIn(cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)));
-                day.setSteps(cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_STEPS)));
+                Day day = new Day(
+                        cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)),
+                        cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)),
+                        cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_STEPS)));
+                days.add(day);
             }
             db.close();
         }
         catch (Exception e){
             Log.d("EXCEPTION", "Thrown in DatabaseManager->addDay", e);
+        }
+        return days;
+    }
+
+    public Day getDayIfExists(String date){
+        String theQuery = DayEntry.SQL_SELECT_QUERY + " WHERE "
+                + DayEntry.COLUMN_DATE + "='" + date + "';";
+        Day day = null;
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(theQuery, null);
+            if (cursor.moveToFirst()){
+                day = new Day(
+                        cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)),
+                        cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)),
+                        cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_STEPS)));
+            }
+            else
+                day = null;
+        }
+        catch (Exception e){
+            Log.d("EXCEPTION", "Thrown in DatabaseManager->getDay", e);
         }
         return day;
     }
@@ -463,7 +489,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public boolean isUserEmpty() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(UserEntry.SQL_SELECT_QUERY, null);
-        if(cursor.getCount() == 0){
+        if(!cursor.moveToFirst()){
+        //if(cursor.getCount() == 0){
             return true;
         }
         cursor.close();
