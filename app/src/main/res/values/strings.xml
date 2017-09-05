@@ -59,4 +59,5 @@
     <string name="label_user_bmi">Body Mass Index</string>
     <string name="label_user_bmr">Basal Metabolic Rate</string>
     <string name="bmr">BMR</string>
+    <string name="quantity">How much to add (g)?</string>
 </resources>

@@ -24,6 +24,7 @@ import java.util.Locale;
  */
 public class HomeFragment extends Fragment {
     private Day today;
+    private User theUser;
 
     public HomeFragment() {
         // Required empty public constructor

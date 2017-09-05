@@ -235,6 +235,11 @@ public class FoodFragment extends Fragment {
                 final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
                 final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
                 final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
+                final EditText editQuantity = (EditText) getView().findViewById(R.id.editQuantity);
+                final TextView editLabel = (TextView)  getView().findViewById(R.id.textLabelQuantity);
+                editQuantity.setText(String.valueOf(food.getQuantity()));
+                editQuantity.setVisibility(View.VISIBLE);
+                editLabel.setVisibility(View.VISIBLE);
                 table.setVisibility(View.VISIBLE);
                 saveButton.setVisibility(View.VISIBLE);
                 saveButton.setOnClickListener(new View.OnClickListener() {
@@ -245,11 +250,19 @@ public class FoodFragment extends Fragment {
                             are not configured at the same time as the other controls as they
                             are not visible until this method is called.
                          */
+                        float quantity = Float.valueOf(String.valueOf(editQuantity.getText()));
+
+                        if(quantity != food.getQuantity()){
+                            food.updateQuantities(quantity);
+                        }
+
                         dbManager.addFood(food);
                         Snackbar saveSnackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
                         saveSnackbar.show();
                         saveButton.setVisibility(View.INVISIBLE);
                         cancelButton.setVisibility(View.INVISIBLE);
+                        editQuantity.setVisibility(View.INVISIBLE);
+                        editLabel.setVisibility(View.INVISIBLE);
                     }
                 });
                 cancelButton.setVisibility(View.VISIBLE);

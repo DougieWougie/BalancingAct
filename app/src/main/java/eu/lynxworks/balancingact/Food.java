@@ -7,18 +7,18 @@ package eu.lynxworks.balancingact;
 
 public class Food {
     /*  Attributes of a "food" item */
-    private final String date;
-    private final long barcode;
-    private final String productName;
-    private final float quantity;
-    private final String brand;
-    private final float salt;
-    private final float energy;
-    private final float carbohydrate;
-    private final float protein;
-    private final float fat;
-    private final float fibre;
-    private final float sugar;
+    private String date;
+    private long barcode;
+    private String productName;
+    private float quantity;
+    private String brand;
+    private float salt;
+    private float energy;
+    private float carbohydrate;
+    private float protein;
+    private float fat;
+    private float fibre;
+    private float sugar;
 
     /*  Because not all of these are always known, in order to avoid the telescoping
         constructor problem, a "builder" design pattern is used.
@@ -74,6 +74,18 @@ public class Food {
         this.fat             = builder.fat;
         this.fibre           = builder.fibre;
         this.sugar           = builder.sugar;
+    }
+
+    public void updateQuantities(float quantity){
+        float factor = quantity / this.quantity;
+        this.salt = this.salt * factor;
+        this.energy = this.energy * factor;
+        this.carbohydrate = this.carbohydrate * factor;
+        this.protein = this.protein * factor;
+        this.fat = this.fat * factor;
+        this.fibre = this.fibre * factor;
+        this.sugar = this.sugar * factor;
+        this.quantity = quantity;
     }
 
     /*  Getter methods are required for populating the SQLite database. */
