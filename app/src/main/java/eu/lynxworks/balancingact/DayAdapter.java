@@ -2,12 +2,16 @@ package eu.lynxworks.balancingact;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private List<Day> dataSet;
@@ -50,8 +54,18 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        /*  Make the date look a little better. */
         Day day = dataSet.get(position);
-        holder.date.setText(day.getTheDate());
+
+        try {
+            SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat longDateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.getDefault());
+            Date aDate = shortDateFormat.parse(day.getTheDate());
+            String dateText = longDateFormat.format(aDate.getTime());
+            holder.date.setText(dateText);
+        } catch (Exception e) {
+            Log.d("EXCEPTION", "Trying to create the long date by parsing the String date", e);
+        }
         holder.caloriesIn.setText(String.valueOf(day.getCaloriesIn()));
         holder.caloriesOut.setText(String.valueOf(day.getCaloriesOut()));
         holder.balance.setText(String.valueOf(day.calorieBalance()));

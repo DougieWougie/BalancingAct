@@ -93,15 +93,16 @@ public class HomeFragment extends Fragment {
             usual method of catching exceptions to the Log with a tag. Clearly we don't want the
             database checking overhead every time the fragment, hence the extra condition.
          */
+        DatabaseManager dbManager = new DatabaseManager(getContext());
+
         if (today==null) {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String theDate = simpleDateFormat.format(new Date());
-                DatabaseManager dbManager = new DatabaseManager(getContext());
                 today = dbManager.getDayIfExists(theDate);
                 if (today == null) {
                     today = new Day(new Date());
-                    dbManager.saveDay(today);
+                    today.setID(dbManager.addDay(today));
                 }
             } catch (Exception e) {
                 Log.d("Dougie", "Exception in ", e);
@@ -123,7 +124,10 @@ public class HomeFragment extends Fragment {
         /*  When activating this fragment, we may have added food or exercise so need to
             update the lost of them in Day today.
          */
+
         today.update(getContext());
+        dbManager.saveDay(today);
+        adapter.notifyDataSetChanged();
 
         return view;
     }

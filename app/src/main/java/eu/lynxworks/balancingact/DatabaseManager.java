@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,7 @@ import java.util.List;
 class DatabaseManager extends SQLiteOpenHelper {
     /*  Inner classes are used to define the SQL schema as a contract, each relates to storing
         an object as a specific table. It also implements the BaseColumns interface which provides
-        access to th _ID  field, an auto incremented integer value that uniquely identifies each row
+        access to the _ID  field, an auto incremented integer value that uniquely identifies each row
         in a table. This is _not_ required however is recommended in recent API versions.
     */
     private class ExerciseEntry implements BaseColumns {
@@ -95,7 +93,7 @@ class DatabaseManager extends SQLiteOpenHelper {
         /*  Define commonly used SQL statements */
         private static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + DayEntry.TABLE + " (" +
-                        DayEntry._ID + "INTEGER PRIMARY KEY," +    // This is the BaseColumns _ID!
+                        DayEntry._ID + " INTEGER PRIMARY KEY," +    // This is the BaseColumns _ID!
                         DayEntry.COLUMN_DATE + " TEXT," +
                         DayEntry.COLUMN_CALORIESIN + " INTEGER," +
                         DayEntry.COLUMN_CALORIESOUT + " INTEGER," +
@@ -187,21 +185,22 @@ class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /*  Method takes a date, creates a new Day object and saves it to the database. */
-    public Day addDay(Date date){
-        Day day = new Day(date);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public long addDay(Day day){
+        long key = 0;
         try{
-            simpleDateFormat.format(simpleDateFormat.parse(date.toString()));
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put(DayEntry.COLUMN_DATE, simpleDateFormat.toString());
-            db.insert(FoodEntry.TABLE, null, values);
+            values.put(DayEntry.COLUMN_DATE, day.getTheDate());
+            values.put(DayEntry.COLUMN_CALORIESIN, day.getCaloriesIn());
+            values.put(DayEntry.COLUMN_CALORIESOUT, day.getCaloriesOut());
+            values.put(DayEntry.COLUMN_STEPS, day.getSteps());
+            key = db.insert(DayEntry.TABLE, null, values);
             db.close();
         }
         catch (Exception e){
-            Log.d("EXCEPTION", "Thrown in DatabaseManager->addDay", e);
+            Log.d("EXCEPTION", "Thrown in DatabaseManager->saveDay", e);
         }
-        return day;
+        return key;
     }
 
     /*  Method takes a date and returns the corresponding Day entry in the database. */
@@ -213,7 +212,7 @@ class DatabaseManager extends SQLiteOpenHelper {
             values.put(DayEntry.COLUMN_CALORIESIN, day.getCaloriesIn());
             values.put(DayEntry.COLUMN_CALORIESOUT, day.getCaloriesOut());
             values.put(DayEntry.COLUMN_STEPS, day.getSteps());
-            db.replace(DayEntry.TABLE, null, values);
+            db.update(DayEntry.TABLE, values, DayEntry._ID + "=?", new String[] { String.valueOf(day.getID()) });
             db.close();
         }
         catch (Exception e){
@@ -229,6 +228,7 @@ class DatabaseManager extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(DayEntry.SQL_SELECT_QUERY, null);
             while(cursor.moveToNext()){
                 Day day = new Day(
+                        cursor.getInt(cursor.getColumnIndex(DayEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)),
@@ -247,11 +247,12 @@ class DatabaseManager extends SQLiteOpenHelper {
         String theQuery = DayEntry.SQL_SELECT_QUERY + " WHERE "
                 + DayEntry.COLUMN_DATE + "='" + date + "';";
         Day day = null;
+        SQLiteDatabase db = this.getReadableDatabase();
         try{
-            SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(theQuery, null);
             if (cursor.moveToFirst()){
                 day = new Day(
+                        cursor.getInt(cursor.getColumnIndex(DayEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)),
@@ -262,6 +263,9 @@ class DatabaseManager extends SQLiteOpenHelper {
         }
         catch (Exception e){
             Log.d("EXCEPTION", "Thrown in DatabaseManager->getDay", e);
+        }
+        finally {
+            db.close();
         }
         return day;
     }

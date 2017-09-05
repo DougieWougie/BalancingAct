@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 class Day {
+    // TODO: Incorporate BMR!
     /*  Attributes */
+    private long ID;
     private String theDate;
     private int caloriesIn;
     private int caloriesOut;
@@ -17,14 +19,16 @@ class Day {
     private int steps;
 
     /*  Getters */
-    public String getTheDate()                          { return this.theDate; }
-    public int getCaloriesIn()                          { return this.caloriesIn; }
-    public int getCaloriesOut()                         { return this.caloriesOut; }
+    public long getID()                                  { return this.ID; }
+    public String getTheDate()                           { return this.theDate; }
+    public int getCaloriesIn()                           { return this.caloriesIn; }
+    public int getCaloriesOut()                          { return this.caloriesOut; }
     private List<Exercise> getExercises()                { return this.exercises; }
     private List<Food> getFoods()                        { return this.foods; }
-    public int getSteps()                               { return this.steps; }
+    public int getSteps()                                { return this.steps; }
 
     /*  Setters */
+    public  void setID(long anID)                        { this.ID = anID; }
     private void setTheDate(String date)                 { this.theDate = date; }
     private void setCaloriesIn(int calories)             { this.caloriesIn = calories; }
     private void setCaloriesOut(int calories)            { this.caloriesOut = calories; }
@@ -48,7 +52,8 @@ class Day {
     /*  Constructor that takes more parameters - used mainly to recreate objects from
         database managers.
      */
-    public Day(String date, int caloriesIn, int caloriesOut, int steps){
+    public Day(long anID, String date, int caloriesIn, int caloriesOut, int steps){
+        setID(anID);
         setTheDate(date);
         setCaloriesIn(caloriesIn);
         setCaloriesOut(caloriesOut);
