@@ -310,7 +310,8 @@ class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /*  Method takes an User object and stores in the database. */
-    public User addUser(User user){
+    public long addUser(User user){
+        long key;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserEntry.COLUMN_NAME, user.getName());
@@ -319,9 +320,9 @@ class DatabaseManager extends SQLiteOpenHelper {
         values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
         values.put(UserEntry.COLUMN_SEX, user.getSex());
         values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
-        db.insert(UserEntry.TABLE, null, values);
+        key = db.insert(UserEntry.TABLE, null, values);
         db.close();
-        return user;
+        return key;
     }
 
     /*  Method updates a specific record. */
@@ -335,23 +336,11 @@ class DatabaseManager extends SQLiteOpenHelper {
             values.put(UserEntry.COLUMN_WEIGHT, user.getWeight());
             values.put(UserEntry.COLUMN_SEX, user.getSex());
             values.put(UserEntry.COLUMN_ACTIVITY, user.getActivityLevel());
-            db.replace(UserEntry.TABLE, null, values);
+            db.update(UserEntry.TABLE, values, UserEntry._ID + "=?", new String[] { String.valueOf(user.getID()) });
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-
-//    public Cursor getDay() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        try{
-//            Cursor cursor = db.rawQuery(DayEntry.SQL_SELECT_QUERY, null);
-//            return cursor;
-//        }
-//        catch (Exception e){
-//            Log.d("Dougie", "Exception thrown in DatabaseManager getDay()", e);
-//        }
-//        return null;
-//    }
 
     /*  Method returns a List of Food objects representing all the items stored in the
         database.
@@ -489,18 +478,6 @@ class DatabaseManager extends SQLiteOpenHelper {
         return exercises;
     }
 
-    /*  Method returns true if the table is empty or false if there is a row. */
-    public boolean isUserEmpty() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(UserEntry.SQL_SELECT_QUERY, null);
-        if(!cursor.moveToFirst()){
-        //if(cursor.getCount() == 0){
-            return true;
-        }
-        cursor.close();
-        return false;
-    }
-
     /*  Method returns a List of User objects representing all the items stored in the
         database.
     */
@@ -516,6 +493,7 @@ class DatabaseManager extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(UserEntry.SQL_SELECT_QUERY, null);
             while (cursor.moveToNext()) {
                 User user = new User(
+                        cursor.getLong(cursor.getColumnIndex(UserEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(UserEntry.COLUMN_NAME)),
                         cursor.getInt(cursor.getColumnIndex(UserEntry.COLUMN_AGE)),
                         cursor.getFloat(cursor.getColumnIndex(UserEntry.COLUMN_HEIGHT)),

@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 class Day {
-    // TODO: Incorporate BMR!
     /*  Attributes */
     private long ID;
     private String theDate;
@@ -93,8 +92,8 @@ class Day {
     }
 
     /*  This method works out the calorie balance. */
-    public int calorieBalance() {
-        return (getCaloriesIn() - getCaloriesOut());
+    public int calorieBalance(int bmr) {
+        return (bmr + getCaloriesIn() - getCaloriesOut());
     }
 
     /*  Over riding toString is a technique advised in Effective Java 2nd edition

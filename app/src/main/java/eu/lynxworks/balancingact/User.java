@@ -11,6 +11,7 @@ package eu.lynxworks.balancingact;
 
 class User {
     /*  Attributes */
+    private long id;            // Used as database primary key
     private String name;
     private int age;            // Years
     private float height;       // cm
@@ -19,6 +20,7 @@ class User {
     private int activityLevel;  // 1-4 relates to exercise and defined below
 
     /*  Getters */
+    public long getID()             { return this.id; }
     public String getName()         { return this.name; }
     public int getAge()             { return this.age; }
     public float getHeight()        { return this.height; }
@@ -27,6 +29,7 @@ class User {
     public int getActivityLevel()   { return this.activityLevel; }
 
     /*  Setters - not everything changes but it's useful to be able to make alterations. */
+    public void setId(long id)                       { this.id = id; }
     private void setName(String name)                { this.name = name; }
     private void setAge(int age)                     { this.age = age; }
     private void setHeight(float height)             { this.height = height; }
@@ -36,6 +39,16 @@ class User {
 
     /*  Constructor */
     public User(String name, int age, float height, float weight, String sex, int activityLevel) {
+        setName(name);
+        setAge(age);
+        setHeight(height);
+        setWeight(weight);
+        setSex(sex);
+        setActivityLevel(activityLevel);
+    }
+    /*  Constructor used by the database */
+    public User(long id, String name, int age, float height, float weight, String sex, int activityLevel) {
+        setId(id);
         setName(name);
         setAge(age);
         setHeight(height);

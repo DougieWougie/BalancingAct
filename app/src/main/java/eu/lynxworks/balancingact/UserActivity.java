@@ -55,8 +55,7 @@ public class UserActivity extends AppCompatActivity {
         //  Uncommenting the following will drop the database, useful for diagnostics.
         //  dbManager.drop(); // Uncomment to drop the table - useful for diagnosing issues.
 
-        /*  With a single user, if they're in the database we want to load their details. */
-        if (!(dbManager.isUserEmpty())) {
+        if(theUser==null){
             getUserFromDatabase();
             populateDisplay();
         }
@@ -66,6 +65,10 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (populateFromDisplay()) {
                     try {
+                        if(isDatabaseEmpty()){
+                            long key = dbManager.addUser(getTheUser());
+                            theUser.setId(key);
+                        }
                         dbManager.updateUser(getTheUser());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -209,16 +212,35 @@ public class UserActivity extends AppCompatActivity {
         empty tables very gracefully so try catch is used to return null if the table is empty.
      */
     private void getUserFromDatabase() {
-        User aUser;
         try{
             List<User> userList = dbManager.getAllUser();
-            aUser = userList.get(0);
+            if(userList.size()==0) {
+                setTheUser(null);
+            }
+            else
+                setTheUser(userList.get(0));
         }
         catch (Exception e){
             e.printStackTrace();
-            aUser = null;
+            setTheUser(null);
         }
-        setTheUser(aUser);
+    }
+
+    /* Method checks if the database is empty. */
+    private boolean isDatabaseEmpty(){
+        boolean empty = false;
+        try{
+            List<User> userList = dbManager.getAllUser();
+            if(userList.size()==0) {
+                empty = true;
+            }
+            else
+                empty = false;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return empty;
     }
 
     /*  We only close the Database Manager on the Activity being destroyed as it is an intensive

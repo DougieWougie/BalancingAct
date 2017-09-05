@@ -122,9 +122,8 @@ public class HomeFragment extends Fragment {
         }
 
         /*  When activating this fragment, we may have added food or exercise so need to
-            update the lost of them in Day today.
+            update the RecyclerView.
          */
-
         today.update(getContext());
         dbManager.saveDay(today);
         adapter.notifyDataSetChanged();

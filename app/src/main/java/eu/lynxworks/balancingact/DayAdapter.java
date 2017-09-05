@@ -15,6 +15,7 @@ import java.util.Locale;
 
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private List<Day> dataSet;
+    private User user;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView date, caloriesIn, caloriesOut, balance;
@@ -39,6 +40,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         try{
             DatabaseManager dbManager = new DatabaseManager(context.getApplicationContext());
             dataSet = dbManager.getAllDays();
+//            user = dbManager.ge
         }
         catch (Exception e){
             e.printStackTrace();
@@ -68,7 +70,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         }
         holder.caloriesIn.setText(String.valueOf(day.getCaloriesIn()));
         holder.caloriesOut.setText(String.valueOf(day.getCaloriesOut()));
-        holder.balance.setText(String.valueOf(day.calorieBalance()));
+        holder.balance.setText(String.valueOf(day.calorieBalance(1000)));
     }
 
     @Override

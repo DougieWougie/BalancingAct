@@ -32,27 +32,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textCardLabelTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-                android:text="@string/card_label_total"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textCardDate" />
-
-            <TextView
                 android:id="@+id/textCardBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/blank"
-                app:layout_constraintLeft_toRightOf="@+id/textCardLabelTotal"
-                app:layout_constraintTop_toBottomOf="@+id/textCardDate" />
+                android:layout_weight="1"
+                android:text="@string/card_label_total"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageFood"
@@ -64,7 +55,7 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/card_food_image"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textCardLabelTotal"
+                app:layout_constraintTop_toBottomOf="@+id/textCardDate"
                 app:srcCompat="@drawable/nav_food" />
 
             <TextView
@@ -89,7 +80,8 @@
                 android:contentDescription="@string/card_exercise_image"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageFood"
-                app:srcCompat="@drawable/nav_exercise" />
+                app:srcCompat="@drawable/nav_exercise"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/textCardExercise"
@@ -100,7 +92,8 @@
                 android:layout_weight="1"
                 android:text="@string/blank"
                 app:layout_constraintLeft_toRightOf="@+id/imageExercise"
-                app:layout_constraintTop_toTopOf="@+id/imageExercise" />
+                app:layout_constraintTop_toTopOf="@+id/imageExercise"
+                android:layout_marginStart="8dp" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
