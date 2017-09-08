@@ -233,7 +233,7 @@ public class FoodFragment extends Fragment {
             } else {
                 updateDisplay(food);
                 try {
-                    if(getView()!=null && getView()!=null) {
+                    if(food!=null && getView()!=null) {
                         final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
                         final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
                         final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
