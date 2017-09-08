@@ -37,6 +37,7 @@
         android:layout_marginStart="8dp"
         android:hint="@string/edit_barcode_hint"
         android:text="@string/edit_barcode"
+        android:inputType="number"
         app:layout_constraintHorizontal_bias="0.562"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/scanButton"

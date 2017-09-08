@@ -349,15 +349,20 @@ public class FoodFragment extends Fragment {
                         JSONObject everything = new JSONObject(jsonResponse);
                         JSONObject product = everything.getJSONObject("product");
 
-                        long barcode = Long.parseLong(product.getString("id"));
+                        String barcode = product.getString("id");
                         String productName = product.getString("product_name");
                         /*  Bit of a fudge - the JSON returns a string where we really
-                            need an integer so we'll remove the " g".
+                            need an integer so we'll remove the " g" - annoyingly some
+                            products don't have the leading space.
                          */
                         String quantity = product.getString("quantity");
                         if (quantity.endsWith(" g")) {
                             quantity = product.getString("quantity").substring(0,
                                     product.getString("quantity").length() - 2);
+                        }
+                        if (quantity.endsWith("g")) {
+                            quantity = product.getString("quantity").substring(0,
+                                    product.getString("quantity").length() - 1);
                         }
                         String brand = product.getString("brands");
 
@@ -374,7 +379,7 @@ public class FoodFragment extends Fragment {
                                 todayString,
                                 productName,
                                 Float.valueOf(quantity),
-                                Float.valueOf(nutrition.getString("energy_100g")))
+                                Float.valueOf(nutrition.getString("energy_100g").trim()))
                                 .barcode(barcode)
                                 .brand(brand)
                                 .salt(Float.valueOf(nutrition.getString("salt_100g")))

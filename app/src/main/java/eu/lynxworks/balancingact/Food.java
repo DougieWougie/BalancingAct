@@ -8,7 +8,7 @@ package eu.lynxworks.balancingact;
 public class Food {
     /*  Attributes of a "food" item */
     private String date;
-    private long barcode;
+    private String barcode;
     private String productName;
     private float quantity;
     private String brand;
@@ -31,7 +31,7 @@ public class Food {
         private final float energy;
 
         /*  Optional parameters set to default values */
-        private long barcode            = 0;
+        private String barcode          = "";
         private String brand            = "";
         private float salt              = 0;
         private float carbohydrate      = 0;
@@ -47,7 +47,7 @@ public class Food {
             this.energy                 = energy;
         }
 
-        public Builder barcode(long value)          { barcode = value;      return this;}
+        public Builder barcode(String value)        { barcode = value;      return this;}
         public Builder brand(String value)          { brand = value;        return this;}
         public Builder salt(float value)            { salt = value;         return this;}
         public Builder carbohydrate(float value)    { carbohydrate = value; return this;}
@@ -90,7 +90,7 @@ public class Food {
 
     /*  Getter methods are required for populating the SQLite database. */
     public String getDate()         { return this.date; }
-    public long getBarcode()        { return this.barcode; }
+    public String getBarcode()        { return this.barcode; }
     public String getProductName()  { return this.productName; }
     public float getQuantity()      { return this.quantity; }
     public String getBrand()        { return this.brand; }

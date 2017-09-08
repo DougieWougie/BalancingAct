@@ -362,7 +362,7 @@ class DatabaseManager extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)),
                     cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_QUANTITY)),
                     cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_ENERGY)))
-                    .barcode(cursor.getLong(cursor.getColumnIndex(FoodEntry.COLUMN_BARCODE)))
+                    .barcode(cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_BARCODE)))
                     .brand(cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_BRAND)))
                     .salt(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_SALT)))
                     .carbohydrate(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_CARBOHYDRATE)))
@@ -402,7 +402,7 @@ class DatabaseManager extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_PRODUCTNAME)),
                         cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_QUANTITY)),
                         cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_ENERGY)))
-                        .barcode(cursor.getLong(cursor.getColumnIndex(FoodEntry.COLUMN_BARCODE)))
+                        .barcode(cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_BARCODE)))
                         .brand(cursor.getString(cursor.getColumnIndex(FoodEntry.COLUMN_BRAND)))
                         .salt(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_SALT)))
                         .carbohydrate(cursor.getFloat(cursor.getColumnIndex(FoodEntry.COLUMN_CARBOHYDRATE)))
