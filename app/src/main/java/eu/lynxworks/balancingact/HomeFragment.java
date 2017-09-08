@@ -1,13 +1,10 @@
 package eu.lynxworks.balancingact;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +22,6 @@ import java.util.Locale;
  */
 public class HomeFragment extends Fragment {
     private Day today;
-    private Global theUser;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,50 +62,24 @@ public class HomeFragment extends Fragment {
         final RecyclerView.Adapter adapter = new DayAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
-        /*  An ItemTouchHelper allows the use of swiping cards and associating event handling.
-            TODO: Add card swiping.
-        */
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper
-                .SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                final int adapterPosition = viewHolder.getAdapterPosition();
-                if (direction == ItemTouchHelper.LEFT) {
-                    Snackbar snackbar = Snackbar.make(recyclerView, "test", Snackbar.LENGTH_SHORT);
-                    snackbar.setAction("Undo", new undoListener());
-                    snackbar.show();
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         /*  If this is the first time the application has been launched today then we create a
             new Day and save it to the database. Checking for today's entry confirms first use.
             We also need to check if there has been a user added to the system and if not notify
             the user.
          */
-        theUser = Global.getGlobalInstance();
+        Global theUser = Global.getGlobalInstance();
         DatabaseManager dbManager = new DatabaseManager(getContext());
-        try {
-            List<User> userList = dbManager.getAllUser();
-            if (userList.size() == 0) {
+        if(theUser.getUser()==null) {
+            try {
+                List<User> userList = dbManager.getAllUser();
+                if (userList.size() == 0) {
+                    theUser.setUser(null);
+                } else
+                    theUser.setUser(userList.get(0));
+            } catch (Exception e) {
+                e.printStackTrace();
                 theUser.setUser(null);
-            } else
-                theUser.setUser(userList.get(0));
-        } catch (Exception e) {
-            e.printStackTrace();
-            theUser.setUser(null);
-        }
-        if(theUser.getUser()==null){
-            Snackbar userWarning = Snackbar.make(getView(), R.string.add_user_msg, Snackbar.LENGTH_LONG);
-            userWarning.show();
+            }
         }
         if (today == null) {
             try {
@@ -145,22 +115,5 @@ public class HomeFragment extends Fragment {
         adapter.notifyDataSetChanged();
         dbManager.close();
         return view;
-    }
-
-    public class undoListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 }

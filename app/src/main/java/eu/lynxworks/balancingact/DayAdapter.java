@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static eu.lynxworks.balancingact.R.string.balance;
+
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private List<Day> dataSet;
     private User user;
@@ -43,7 +45,9 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             DatabaseManager dbManager = new DatabaseManager(context.getApplicationContext());
             dataSet = dbManager.getAllDays();
             Global global = Global.getGlobalInstance();
-            user = global.getUser();
+            if(global.getUser()!=null) {
+                user = global.getUser();
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -62,7 +66,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Day day = dataSet.get(position);
-        int balance = day.calorieBalance(user.getBMR());
         try {
             /*  Make the date look a little better. */
             SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -79,7 +82,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             holder.balance.setText(R.string.add_user_for_bmr);
         }
         else {
-            holder.balance.setText("Balance " + String.valueOf(balance));
+            holder.balance.setText("Balance " + String.valueOf(day.calorieBalance(user.getBMR())));
             if(balance>0){
                 holder.balance.setTextColor(Color.GREEN);
             }
