@@ -231,7 +231,7 @@ public class FoodFragment extends Fragment {
         protected void onPostExecute(final Food food) {
             super.onPostExecute(food);
             if(food==null){
-                TextView notFound = (TextView) getView().findViewById(R.id.textNotfound);
+                TextView notFound = (TextView) getView().findViewById(R.id.textNotFound);
                 notFound.setVisibility(View.VISIBLE);
                 notFound.setText(R.string.food_not_found);
                 Button manualAdd = (Button) getView().findViewById(R.id.buttonManualAdd);

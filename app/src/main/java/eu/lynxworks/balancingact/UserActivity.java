@@ -89,7 +89,7 @@ public class UserActivity extends AppCompatActivity {
     }
 
     public void calculateAndDisplayStatistics(){
-        int bmi = (int) this.getTheUser().getBMI();
+        int bmi = this.getTheUser().getBMI();
         int bmr = (int) this.getTheUser().getBMR();
 
         TextView textBmi = (TextView) findViewById(R.id.textUserBMI);

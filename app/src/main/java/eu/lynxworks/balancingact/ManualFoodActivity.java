@@ -36,8 +36,8 @@ public class ManualFoodActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (populateFromDisplay()) {
                     try {
-                        DatabaseManager dbMananager = new DatabaseManager(getApplicationContext());
-                        dbMananager.addFood(food);
+                        DatabaseManager dbManager = new DatabaseManager(getApplicationContext());
+                        dbManager.addFood(food);
                         Snackbar snackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
                         snackbar.show();
                         save.setVisibility(View.INVISIBLE);

@@ -14,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static eu.lynxworks.balancingact.R.string.balance;
-
 public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private List<Day> dataSet;
     private User user;
@@ -82,11 +80,12 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             holder.balance.setText(R.string.add_user_for_bmr);
         }
         else {
-            holder.balance.setText("Balance " + String.valueOf(day.calorieBalance(user.getBMR())));
-            if(balance>0){
+            int calorieBalance = day.calorieBalance(user.getBMR());
+            holder.balance.setText("Balance " + String.valueOf(calorieBalance));
+            if(calorieBalance>=0){
                 holder.balance.setTextColor(Color.GREEN);
             }
-            if(balance<0){
+            if(calorieBalance<0){
                 holder.balance.setTextColor(Color.RED);
             }
         }

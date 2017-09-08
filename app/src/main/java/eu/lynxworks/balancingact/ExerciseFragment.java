@@ -102,8 +102,10 @@ public class ExerciseFragment extends Fragment {
         try {
             DatabaseManager dbManager = new DatabaseManager(getActivity());
             dbManager.addExercise(exercise);
-            Snackbar saveSnackbar = Snackbar.make(getView(), R.string.snack_save_success, Snackbar.LENGTH_SHORT);
-            saveSnackbar.show();
+            if(getView()!=null) {
+                Snackbar saveSnackbar = Snackbar.make(getView(), R.string.snack_save_success, Snackbar.LENGTH_SHORT);
+                saveSnackbar.show();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

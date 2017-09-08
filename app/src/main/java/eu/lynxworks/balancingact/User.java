@@ -71,7 +71,7 @@ class User {
         float mass = getWeight();
         float height = getHeight();
         float age = (float) getAge();
-        float s = 5f;
+        float s;
         switch (getSex()){
             case("Male"): {
                 s = 5f;
@@ -92,6 +92,6 @@ class User {
         *   needs to be divided by 100. */
         float conversion = 100f;
 
-        return (int) Math.round(getWeight() / ((getHeight() / conversion) * (getHeight() / conversion)));
+        return Math.round(getWeight() / ((getHeight() / conversion) * (getHeight() / conversion)));
     }
 }

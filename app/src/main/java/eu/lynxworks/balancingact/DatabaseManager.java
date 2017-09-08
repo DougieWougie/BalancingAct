@@ -247,25 +247,19 @@ class DatabaseManager extends SQLiteOpenHelper {
         String theQuery = DayEntry.SQL_SELECT_QUERY + " WHERE "
                 + DayEntry.COLUMN_DATE + "='" + date + "';";
         Day day = null;
-        SQLiteDatabase db = this.getReadableDatabase();
-        try{
+        try (SQLiteDatabase db = this.getReadableDatabase()) {
             Cursor cursor = db.rawQuery(theQuery, null);
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 day = new Day(
                         cursor.getInt(cursor.getColumnIndex(DayEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(DayEntry.COLUMN_DATE)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESIN)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_CALORIESOUT)),
                         cursor.getInt(cursor.getColumnIndex(DayEntry.COLUMN_STEPS)));
-            }
-            else
+            } else
                 day = null;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("EXCEPTION", "Thrown in DatabaseManager->getDay", e);
-        }
-        finally {
-            db.close();
         }
         return day;
     }
