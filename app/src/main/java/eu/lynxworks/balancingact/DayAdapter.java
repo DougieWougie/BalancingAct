@@ -79,7 +79,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             holder.balance.setText(R.string.add_user_for_bmr);
         }
         else {
-            holder.balance.setText(String.valueOf(balance));
+            holder.balance.setText("Balance " + String.valueOf(balance));
             if(balance>0){
                 holder.balance.setTextColor(Color.GREEN);
             }
