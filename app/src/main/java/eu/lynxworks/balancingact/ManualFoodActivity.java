@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class ManualFoodActivity extends AppCompatActivity {
 
@@ -70,21 +71,19 @@ public class ManualFoodActivity extends AppCompatActivity {
             return false;
         } else {
             Date today = new Date();
-            SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String todayString = yearMonthDay.format(today);
 
             String productName = String.valueOf(name.getText());
             String calories = String.valueOf(energy.getText());
             String amount = String.valueOf(quantity.getText());
 
-            Food food = new Food.Builder(
+            this.food = new Food.Builder(
                     todayString,
                     productName,
                     Float.valueOf(amount),
                     Float.valueOf(calories))
                     .build();
-
-            this.food = food;
             return true;
         }
     }

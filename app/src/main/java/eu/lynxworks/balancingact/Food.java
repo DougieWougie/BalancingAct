@@ -7,11 +7,11 @@ package eu.lynxworks.balancingact;
 
 public class Food {
     /*  Attributes of a "food" item */
-    private String date;
-    private String barcode;
-    private String productName;
+    private final String date;
+    private final String barcode;
+    private final String productName;
     private float quantity;
-    private String brand;
+    private final String brand;
     private float salt;
     private float energy;
     private float carbohydrate;

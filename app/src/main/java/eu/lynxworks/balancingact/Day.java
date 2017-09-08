@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 class Day {
     /*  Attributes */
@@ -38,7 +39,7 @@ class Day {
 
     /*  Constructor used when creating a new Day. */
     public Day(Date date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
             setTheDate(simpleDateFormat.format(date));
         } catch (Exception e) {
@@ -94,8 +95,7 @@ class Day {
 
     /*  This method works out the calorie balance. */
     public int calorieBalance(float bmr) {
-        int balance = (int) (bmr + getCaloriesOut() - getCaloriesIn());
-        return balance;
+        return (int) (bmr + getCaloriesOut() - getCaloriesIn());
     }
 
     /*  Over riding toString is a technique advised in Effective Java 2nd edition

@@ -1,7 +1,6 @@
 package eu.lynxworks.balancingact;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -91,26 +90,11 @@ public class FoodFragment extends Fragment {
         return fragmentView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
     /*  The following functions conduct the bulk of the fragment's work.
         This function updates the display with the Food object passed to it.
      */
     private void updateDisplay(Food food) {
-        if (food != null) {
+        if (food != null && getView() != null) {
             try {
                 TextView txt_product = (TextView) getView().findViewById(R.id.txt_food_product);
                 TextView txt_brand = (TextView) getView().findViewById(R.id.txt_food_brand);
@@ -134,7 +118,6 @@ public class FoodFragment extends Fragment {
             } catch (Exception e) {
                 Log.d("EXCEPTION", "In FoodFragment->upDateDisplay()", e);
             }
-
             try {
                 TextView txt_energy = (TextView) getView().findViewById(R.id.txt_energy);
                 TextView txt_salt = (TextView) getView().findViewById(R.id.txt_salt);
@@ -162,24 +145,26 @@ public class FoodFragment extends Fragment {
 
     private void clearDisplay() {
         try {
-            TextView txt_product = (TextView) getView().findViewById(R.id.txt_food_product);
-            TextView txt_brand = (TextView) getView().findViewById(R.id.txt_food_brand);
-            TextView txt_energy = (TextView) getView().findViewById(R.id.txt_100g_energy);
-            TextView txt_salt = (TextView) getView().findViewById(R.id.txt_100g_salt);
-            TextView txt_carb = (TextView) getView().findViewById(R.id.txt_100g_carbohydrate);
-            TextView txt_protein = (TextView) getView().findViewById(R.id.txt_100g_protein);
-            TextView txt_fat = (TextView) getView().findViewById(R.id.txt_100g_fat);
-            TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_100g_fiber);
-            TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_100g_sugar);
-            txt_product.setText(blank);
-            txt_brand.setText(blank);
-            txt_energy.setText(blank);
-            txt_salt.setText(blank);
-            txt_sugar.setText(blank);
-            txt_carb.setText(blank);
-            txt_protein.setText(blank);
-            txt_fat.setText(blank);
-            txt_fiber.setText(blank);
+            if(getView()!=null) {
+                TextView txt_product = (TextView) getView().findViewById(R.id.txt_food_product);
+                TextView txt_brand = (TextView) getView().findViewById(R.id.txt_food_brand);
+                TextView txt_energy = (TextView) getView().findViewById(R.id.txt_100g_energy);
+                TextView txt_salt = (TextView) getView().findViewById(R.id.txt_100g_salt);
+                TextView txt_carb = (TextView) getView().findViewById(R.id.txt_100g_carbohydrate);
+                TextView txt_protein = (TextView) getView().findViewById(R.id.txt_100g_protein);
+                TextView txt_fat = (TextView) getView().findViewById(R.id.txt_100g_fat);
+                TextView txt_fiber = (TextView) getView().findViewById(R.id.txt_100g_fiber);
+                TextView txt_sugar = (TextView) getView().findViewById(R.id.txt_100g_sugar);
+                txt_product.setText(blank);
+                txt_brand.setText(blank);
+                txt_energy.setText(blank);
+                txt_salt.setText(blank);
+                txt_sugar.setText(blank);
+                txt_carb.setText(blank);
+                txt_protein.setText(blank);
+                txt_fat.setText(blank);
+                txt_fiber.setText(blank);
+            }
         } catch (Exception e) {
             Log.d("EXCEPTION", "In FoodFragment->clearDisplay()", e);
         }
@@ -205,9 +190,11 @@ public class FoodFragment extends Fragment {
     }
 
     private void updateBarcode() {
-        EditText editText = (EditText) getView().findViewById(R.id.editBarcode);
-        if (editText != null) {
-            queryBarcode = String.valueOf(editText.getText());
+        if(getView()!=null) {
+            EditText editText = (EditText) getView().findViewById(R.id.editBarcode);
+            if (editText != null) {
+                queryBarcode = String.valueOf(editText.getText());
+            }
         }
     }
 
@@ -230,7 +217,7 @@ public class FoodFragment extends Fragment {
         @Override
         protected void onPostExecute(final Food food) {
             super.onPostExecute(food);
-            if(food==null){
+            if (food == null && getView()!=null) {
                 TextView notFound = (TextView) getView().findViewById(R.id.textNotFound);
                 notFound.setVisibility(View.VISIBLE);
                 notFound.setText(R.string.food_not_found);
@@ -243,58 +230,59 @@ public class FoodFragment extends Fragment {
                         startActivity(editIntent);
                     }
                 });
-            }
-            else {
+            } else {
                 updateDisplay(food);
                 try {
-                    final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
-                    final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
-                    final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
-                    final EditText editQuantity = (EditText) getView().findViewById(R.id.editQuantity);
-                    final TextView editLabel = (TextView) getView().findViewById(R.id.textLabelQuantity);
-                    editQuantity.setText(String.valueOf(food.getQuantity()));
-                    editQuantity.setVisibility(View.VISIBLE);
-                    editLabel.setVisibility(View.VISIBLE);
-                    table.setVisibility(View.VISIBLE);
-                    saveButton.setVisibility(View.VISIBLE);
-                    saveButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                    if(getView()!=null && getView()!=null) {
+                        final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
+                        final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
+                        final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
+                        final EditText editQuantity = (EditText) getView().findViewById(R.id.editQuantity);
+                        final TextView editLabel = (TextView) getView().findViewById(R.id.textLabelQuantity);
+                        editQuantity.setText(String.valueOf(food.getQuantity()));
+                        editQuantity.setVisibility(View.VISIBLE);
+                        editLabel.setVisibility(View.VISIBLE);
+                        table.setVisibility(View.VISIBLE);
+                        saveButton.setVisibility(View.VISIBLE);
+                        saveButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
                         /*  A database manager is used to save the entry, then a snackbar gives
                             the user feedback. Finally the buttons are hidden. The event handlers
                             are not configured at the same time as the other controls as they
                             are not visible until this method is called.
                          */
-                            float quantity = Float.valueOf(String.valueOf(editQuantity.getText()));
+                                float quantity = Float.valueOf(String.valueOf(editQuantity.getText()));
 
-                            if (quantity != food.getQuantity()) {
-                                food.updateQuantities(quantity);
+                                if (quantity != food.getQuantity()) {
+                                    food.updateQuantities(quantity);
+                                }
+
+                                dbManager.addFood(food);
+                                Snackbar saveSnackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
+                                saveSnackbar.show();
+                                saveButton.setVisibility(View.INVISIBLE);
+                                cancelButton.setVisibility(View.INVISIBLE);
+                                editQuantity.setVisibility(View.INVISIBLE);
+                                editLabel.setVisibility(View.INVISIBLE);
                             }
-
-                            dbManager.addFood(food);
-                            Snackbar saveSnackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
-                            saveSnackbar.show();
-                            saveButton.setVisibility(View.INVISIBLE);
-                            cancelButton.setVisibility(View.INVISIBLE);
-                            editQuantity.setVisibility(View.INVISIBLE);
-                            editLabel.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                    cancelButton.setVisibility(View.VISIBLE);
-                    cancelButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                        });
+                        cancelButton.setVisibility(View.VISIBLE);
+                        cancelButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
                         /*  All that needs to happen on cancelling is to reset the display
                             and hide the buttons. A snackbar is used to give the user feedback.
                         */
-                            clearDisplay();
-                            table.setVisibility(View.INVISIBLE);
-                            saveButton.setVisibility(View.INVISIBLE);
-                            cancelButton.setVisibility(View.INVISIBLE);
-                            Snackbar snackbar = Snackbar.make(view, R.string.cancelled, Snackbar.LENGTH_SHORT);
-                            snackbar.show();
-                        }
-                    });
+                                clearDisplay();
+                                table.setVisibility(View.INVISIBLE);
+                                saveButton.setVisibility(View.INVISIBLE);
+                                cancelButton.setVisibility(View.INVISIBLE);
+                                Snackbar snackbar = Snackbar.make(view, R.string.cancelled, Snackbar.LENGTH_SHORT);
+                                snackbar.show();
+                            }
+                        });
+                    }
                 } catch (Exception e) {
                     Log.d("EXCEPTION", "In FoodFragment->onPostExecute()", e);
                 }
@@ -349,8 +337,7 @@ public class FoodFragment extends Fragment {
                         stringBuffer.append(line).append("\n");
                     }
                     jsonResponse = stringBuffer.toString();
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     jsonResponse = null;
                 }
 
@@ -388,10 +375,10 @@ public class FoodFragment extends Fragment {
                         JSONObject nutrition = product.getJSONObject("nutriments");
 
                         Date today = new Date();
-                        SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                         String todayString = yearMonthDay.format(today);
 
-                        Food food = new Food.Builder(
+                        return new Food.Builder(
                                 todayString,
                                 productName,
                                 Float.valueOf(quantity),
@@ -405,7 +392,6 @@ public class FoodFragment extends Fragment {
                                 .fibre(Float.valueOf((nutrition.getString("fiber_100g"))))
                                 .sugar(Float.valueOf((nutrition.getString("sugars_100g"))))
                                 .build();
-                        return food;
                     } catch (JSONException e) {
                         Log.d("EXCEPTION", "Parsing the JSON response in searchBarcode()", e);
                     }
@@ -416,7 +402,9 @@ public class FoodFragment extends Fragment {
             } finally {
                 if (anURLConnection != null) {
                     try {
-                        bufferedReader.close();
+                        if(bufferedReader!=null) {
+                            bufferedReader.close();
+                        }
                     } catch (IOException e) {
                         Log.d("EXCEPTION", "IOException in searchBarcode()", e);
                     }
@@ -429,7 +417,7 @@ public class FoodFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK && getView()!=null) {
                 EditText editBarcode = (EditText) getView().findViewById(R.id.editBarcode);
                 editBarcode.setText(data.getStringExtra("barcodeKey"));
             }
@@ -437,7 +425,7 @@ public class FoodFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         dbManager.close();
         super.onDestroy();
     }

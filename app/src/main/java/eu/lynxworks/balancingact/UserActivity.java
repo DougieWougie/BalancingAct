@@ -52,9 +52,6 @@ public class UserActivity extends AppCompatActivity {
         Button save = (Button) findViewById(R.id.userSaveButton);
         Button cancel = (Button) findViewById(R.id.userCancelButton);
 
-        //  Uncommenting the following will drop the database, useful for diagnostics.
-        //  dbManager.drop(); // Uncomment to drop the table - useful for diagnosing issues.
-
         if(theUser==null){
             getUserFromDatabase();
             populateDisplay();
@@ -88,7 +85,7 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-    public void calculateAndDisplayStatistics(){
+    private void calculateAndDisplayStatistics(){
         int bmi = this.getTheUser().getBMI();
         int bmr = (int) this.getTheUser().getBMR();
 
@@ -233,11 +230,7 @@ public class UserActivity extends AppCompatActivity {
         boolean empty = false;
         try{
             List<User> userList = dbManager.getAllUser();
-            if(userList.size()==0) {
-                empty = true;
-            }
-            else
-                empty = false;
+            empty = userList.size() == 0;
         }
         catch (Exception e){
             e.printStackTrace();

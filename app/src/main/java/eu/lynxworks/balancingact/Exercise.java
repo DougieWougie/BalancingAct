@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Exercise class
@@ -40,7 +41,7 @@ class Exercise {
         setCalories(calories);
         try {
             Date today = new Date();
-            SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat yearMonthDay = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String todayString = yearMonthDay.format(today);
             setDay(todayString);
         } catch (Exception e) {

@@ -1,7 +1,6 @@
 package eu.lynxworks.balancingact;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -64,12 +63,14 @@ public class ExerciseFragment extends Fragment {
 
     private void clearDisplay() {
         try {
-            EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
-            EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
-            EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
-            editExercise.setText(R.string.blank);
-            editDuration.setText(R.string.blank);
-            editCalories.setText(R.string.blank);
+            if(getView()!=null) {
+                EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
+                EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
+                EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
+                editExercise.setText(R.string.blank);
+                editDuration.setText(R.string.blank);
+                editCalories.setText(R.string.blank);
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -77,17 +78,18 @@ public class ExerciseFragment extends Fragment {
 
     private boolean getExercise() {
         try {
-            EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
-            EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
-            EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
-            if (!editExercise.getText().toString().isEmpty() &&
-                !editDuration.getText().toString().isEmpty() &&
-                !editCalories.getText().toString().isEmpty() )
-            {
-                exercise = new Exercise(editExercise.getText().toString(),
-                        Float.parseFloat(editDuration.getText().toString()),
-                        Float.parseFloat(editCalories.getText().toString()));
-                return true;
+            if(getView()!=null) {
+                EditText editExercise = (EditText) getView().findViewById(R.id.editExercise);
+                EditText editDuration = (EditText) getView().findViewById(R.id.editDuration);
+                EditText editCalories = (EditText) getView().findViewById(R.id.editCalories);
+                if (!editExercise.getText().toString().isEmpty() &&
+                        !editDuration.getText().toString().isEmpty() &&
+                        !editCalories.getText().toString().isEmpty()) {
+                    exercise = new Exercise(editExercise.getText().toString(),
+                            Float.parseFloat(editDuration.getText().toString()),
+                            Float.parseFloat(editCalories.getText().toString()));
+                    return true;
+                }
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -109,15 +111,5 @@ public class ExerciseFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 }

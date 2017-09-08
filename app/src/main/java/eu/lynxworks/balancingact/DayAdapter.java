@@ -19,7 +19,10 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     private User user;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView date, caloriesIn, caloriesOut, balance;
+        public final TextView date;
+        public final TextView caloriesIn;
+        public final TextView caloriesOut;
+        public final TextView balance;
 
         public ViewHolder(View view){
             super(view);
@@ -81,7 +84,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         }
         else {
             int calorieBalance = day.calorieBalance(user.getBMR());
-            holder.balance.setText("Balance " + String.valueOf(calorieBalance));
+            holder.balance.setText(String.valueOf(calorieBalance));
             if(calorieBalance>=0){
                 holder.balance.setTextColor(Color.GREEN);
             }
