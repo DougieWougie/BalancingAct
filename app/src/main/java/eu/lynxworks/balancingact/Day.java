@@ -28,6 +28,7 @@ class Day {
 
     /*  Setters */
     public  void setID(long anID)                        { this.ID = anID; }
+
     private void setTheDate(String date)                 { this.theDate = date; }
     private void setCaloriesIn(int calories)             { this.caloriesIn = calories; }
     private void setCaloriesOut(int calories)            { this.caloriesOut = calories; }

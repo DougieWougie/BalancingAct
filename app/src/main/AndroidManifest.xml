@@ -40,7 +40,15 @@
         <activity
             android:name=".UserActivity"
             android:label="@string/user_activity_title"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ManualFoodActivity"
+            android:label="@string/title_activity_manual_food"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="eu.lynxworks.balancingact.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

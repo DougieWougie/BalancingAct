@@ -60,4 +60,9 @@
     <string name="label_user_bmr">Basal Metabolic Rate</string>
     <string name="bmr">BMR</string>
     <string name="quantity">How much to add (g)?</string>
+    <string name="add_user_msg">You need to add a user!</string>
+    <string name="title_activity_manual_food">Enter food</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

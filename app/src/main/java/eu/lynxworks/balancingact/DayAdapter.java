@@ -22,10 +22,11 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
 
         public ViewHolder(View view){
             super(view);
-            date   = (TextView) view.findViewById(R.id.textCardDate);
+
+            date  = (TextView) view.findViewById(R.id.textCardDate);
             caloriesIn  = (TextView) view.findViewById(R.id.textCardFood);
-            caloriesOut     = (TextView) view.findViewById(R.id.textCardExercise);
-            balance   = (TextView) view.findViewById(R.id.textCardBalance);
+            caloriesOut = (TextView) view.findViewById(R.id.textCardExercise);
+            balance = (TextView) view.findViewById(R.id.textCardBalance);
 
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -40,7 +41,6 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         try{
             DatabaseManager dbManager = new DatabaseManager(context.getApplicationContext());
             dataSet = dbManager.getAllDays();
-//            user = dbManager.ge
         }
         catch (Exception e){
             e.printStackTrace();
@@ -50,16 +50,24 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create new view
+        Global global = Global.getGlobalInstance();
+        this.user = global.getUser();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_home, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        /*  Make the date look a little better. */
         Day day = dataSet.get(position);
+        try {
+            float bmr = user.getBMR();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         try {
+            /*  Make the date look a little better. */
             SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             SimpleDateFormat longDateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.getDefault());
             Date aDate = shortDateFormat.parse(day.getTheDate());
@@ -70,7 +78,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         }
         holder.caloriesIn.setText(String.valueOf(day.getCaloriesIn()));
         holder.caloriesOut.setText(String.valueOf(day.getCaloriesOut()));
-        holder.balance.setText(String.valueOf(day.calorieBalance(1000)));
+        //holder.balance.setText(String.valueOf(day.calorieBalance(bmr)));
     }
 
     @Override

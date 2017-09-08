@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -24,7 +25,7 @@ import java.util.Locale;
  */
 public class HomeFragment extends Fragment {
     private Day today;
-    private User theUser;
+    private Global theUser;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,8 +68,7 @@ public class HomeFragment extends Fragment {
             TODO: Add card swiping.
         */
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper
-                .SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
-        {
+                .SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -77,8 +77,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 final int adapterPosition = viewHolder.getAdapterPosition();
-                if(direction == ItemTouchHelper.LEFT) {
-                    Snackbar snackbar= Snackbar.make(recyclerView,"test",Snackbar.LENGTH_SHORT);
+                if (direction == ItemTouchHelper.LEFT) {
+                    Snackbar snackbar = Snackbar.make(recyclerView, "test", Snackbar.LENGTH_SHORT);
                     snackbar.setAction("Undo", new undoListener());
                     snackbar.show();
                     adapter.notifyDataSetChanged();
@@ -89,14 +89,27 @@ public class HomeFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         /*  If this is the first time the application has been launched today then we create a
-            new Day and save it to the database. Checking for today's entry confirms first use. As
-            with any database activity, there is always a risk of an exception and we use the
-            usual method of catching exceptions to the Log with a tag. Clearly we don't want the
-            database checking overhead every time the fragment, hence the extra condition.
+            new Day and save it to the database. Checking for today's entry confirms first use.
+            We also need to check if there has been a user added to the system and if not notify
+            the user.
          */
+        theUser = Global.getGlobalInstance();
         DatabaseManager dbManager = new DatabaseManager(getContext());
-
-        if (today==null) {
+        try {
+            List<User> userList = dbManager.getAllUser();
+            if (userList.size() == 0) {
+                theUser.setUser(null);
+            } else
+                theUser.setUser(userList.get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+            theUser.setUser(null);
+        }
+        if(theUser.getUser()==null){
+            Snackbar userWarning = Snackbar.make(getView(), R.string.add_user_msg, Snackbar.LENGTH_LONG);
+            userWarning.show();
+        }
+        if (today == null) {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String theDate = simpleDateFormat.format(new Date());
@@ -128,13 +141,13 @@ public class HomeFragment extends Fragment {
         today.update(getContext());
         dbManager.saveDay(today);
         adapter.notifyDataSetChanged();
-
+        dbManager.close();
         return view;
     }
 
-    public class undoListener implements View.OnClickListener{
+    public class undoListener implements View.OnClickListener {
         @Override
-        public void onClick(View view){
+        public void onClick(View view) {
 
         }
     }
