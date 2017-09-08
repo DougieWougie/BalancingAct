@@ -72,6 +72,8 @@ class Day {
         }
         setCaloriesIn(caloriesConsumed());
         setCaloriesOut(caloriesExpended());
+        Global global = Global.getGlobalInstance();
+        setSteps(global.getStepCount());
     }
 
     /*  The next two methods iterate through the associated data and total the amount

@@ -65,4 +65,5 @@
     <string name="edit_food_requires">You must enter name, quantity and energy!</string>
     <string name="add_food">Add food</string>
     <string name="calorie_balance">Balance:</string>
+    <string name="card_steps">Steps</string>
 </resources>

@@ -23,6 +23,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         public final TextView caloriesIn;
         public final TextView caloriesOut;
         public final TextView balance;
+        public final TextView steps;
 
         public ViewHolder(View view){
             super(view);
@@ -31,6 +32,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             caloriesIn  = (TextView) view.findViewById(R.id.textCardFood);
             caloriesOut = (TextView) view.findViewById(R.id.textCardExercise);
             balance = (TextView) view.findViewById(R.id.textCardBalance);
+            steps = (TextView) view.findViewById(R.id.textCardSteps);
 
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -91,6 +93,8 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
             if(calorieBalance<0){
                 holder.balance.setTextColor(Color.RED);
             }
+            Global global = Global.getGlobalInstance();
+            holder.steps.setText(String.valueOf(global.getStepCount()));
         }
     }
 
