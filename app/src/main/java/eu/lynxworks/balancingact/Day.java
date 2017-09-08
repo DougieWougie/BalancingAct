@@ -93,8 +93,9 @@ class Day {
     }
 
     /*  This method works out the calorie balance. */
-    public int calorieBalance(int bmr) {
-        return (bmr + getCaloriesIn() - getCaloriesOut());
+    public int calorieBalance(float bmr) {
+        int balance = (int) (bmr + getCaloriesOut() - getCaloriesIn());
+        return balance;
     }
 
     /*  Over riding toString is a technique advised in Effective Java 2nd edition

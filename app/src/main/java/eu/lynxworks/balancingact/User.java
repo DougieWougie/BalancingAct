@@ -68,28 +68,23 @@ class User {
             P = (10 * mass in kg + 6.25 *height in cm - 5 * age in years + s) kcal/day
                 where s is 5 for male, -161 for female.
          */
-//        float mass = getWeight();
-//        float height = getHeight();
-//        float age = (float) getAge();
-//        float s = 5f;
-//        switch (getSex()){
-//            case("Male"): {
-//                s = 5f;
-//                break;
-//            }
-//            case("Female"):{
-//                s = -161f;
-//                break;
-//            }
-//            default:
-//                s = 5f;
-//        }
-//        P = (10 * mass);
-//        P = P + (6.25f * height);
-//        P = P - (5 * age) + s;
-//        int temp = Math.round(P);
-        return 10f;
-//        return Math.round((10f * getWeight()) + (6.25f * getHeight()) - (5f * (float) getAge()));
+        float mass = getWeight();
+        float height = getHeight();
+        float age = (float) getAge();
+        float s = 5f;
+        switch (getSex()){
+            case("Male"): {
+                s = 5f;
+                break;
+            }
+            case("Female"):{
+                s = -161f;
+                break;
+            }
+            default:
+                s = 5f;
+        }
+        return Math.round((10f * mass) + (6.25f * height) - (5f * age) + s);
     }
 
     public int getBMI() {

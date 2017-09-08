@@ -1,6 +1,7 @@
 package eu.lynxworks.balancingact;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,8 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         try{
             DatabaseManager dbManager = new DatabaseManager(context.getApplicationContext());
             dataSet = dbManager.getAllDays();
+            Global global = Global.getGlobalInstance();
+            user = global.getUser();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -59,13 +62,7 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Day day = dataSet.get(position);
-        try {
-            float bmr = user.getBMR();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
+        int balance = day.calorieBalance(user.getBMR());
         try {
             /*  Make the date look a little better. */
             SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -78,7 +75,18 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.ViewHolder> {
         }
         holder.caloriesIn.setText(String.valueOf(day.getCaloriesIn()));
         holder.caloriesOut.setText(String.valueOf(day.getCaloriesOut()));
-        //holder.balance.setText(String.valueOf(day.calorieBalance(bmr)));
+        if(user==null){
+            holder.balance.setText(R.string.add_user_for_bmr);
+        }
+        else {
+            holder.balance.setText(String.valueOf(balance));
+            if(balance>0){
+                holder.balance.setTextColor(Color.GREEN);
+            }
+            if(balance<0){
+                holder.balance.setTextColor(Color.RED);
+            }
+        }
     }
 
     @Override
