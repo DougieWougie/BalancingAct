@@ -66,4 +66,17 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="add_user_for_bmr">Add user!</string>
+    <string name="edit_food_name">Name (required)</string>
+    <string name="edit_food_brand">Brand name</string>
+    <string name="edit_food_quantity">Quantity (g) (required)</string>
+    <string name="edit_food_energy">Energy (kcals)(required)</string>
+    <string name="edit_food_salt">Salt (g)</string>
+    <string name="edit_food_carb">Carb (g)</string>
+    <string name="label_edit_food">Please enter the 100g values</string>
+    <string name="edit_food_protein">Protein (g)</string>
+    <string name="edit_food_fat">Saturated fat (g)</string>
+    <string name="edit_food_fibre">Fibre (g)</string>
+    <string name="edit_food_sugar">Sugar (g)</string>
+    <string name="edit_food_requires">You must enter name, quantity and energy!</string>
+    <string name="add_food">Add food</string>
 </resources>

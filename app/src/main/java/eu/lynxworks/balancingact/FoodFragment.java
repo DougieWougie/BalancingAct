@@ -230,58 +230,74 @@ public class FoodFragment extends Fragment {
         @Override
         protected void onPostExecute(final Food food) {
             super.onPostExecute(food);
-            updateDisplay(food);
-            try {
-                final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
-                final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
-                final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
-                final EditText editQuantity = (EditText) getView().findViewById(R.id.editQuantity);
-                final TextView editLabel = (TextView)  getView().findViewById(R.id.textLabelQuantity);
-                editQuantity.setText(String.valueOf(food.getQuantity()));
-                editQuantity.setVisibility(View.VISIBLE);
-                editLabel.setVisibility(View.VISIBLE);
-                table.setVisibility(View.VISIBLE);
-                saveButton.setVisibility(View.VISIBLE);
-                saveButton.setOnClickListener(new View.OnClickListener() {
+            if(food==null){
+                TextView notFound = (TextView) getView().findViewById(R.id.textNotfound);
+                notFound.setVisibility(View.VISIBLE);
+                notFound.setText(R.string.food_not_found);
+                Button manualAdd = (Button) getView().findViewById(R.id.buttonManualAdd);
+                manualAdd.setVisibility(View.VISIBLE);
+                manualAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Intent editIntent = new Intent(getContext(), ManualFoodActivity.class);
+                        startActivity(editIntent);
+                    }
+                });
+            }
+            else {
+                updateDisplay(food);
+                try {
+                    final Button saveButton = (Button) getView().findViewById(R.id.foodSaveButton);
+                    final Button cancelButton = (Button) getView().findViewById(R.id.foodCancelButton);
+                    final TableLayout table = (TableLayout) getView().findViewById(R.id.tableLayout);
+                    final EditText editQuantity = (EditText) getView().findViewById(R.id.editQuantity);
+                    final TextView editLabel = (TextView) getView().findViewById(R.id.textLabelQuantity);
+                    editQuantity.setText(String.valueOf(food.getQuantity()));
+                    editQuantity.setVisibility(View.VISIBLE);
+                    editLabel.setVisibility(View.VISIBLE);
+                    table.setVisibility(View.VISIBLE);
+                    saveButton.setVisibility(View.VISIBLE);
+                    saveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                         /*  A database manager is used to save the entry, then a snackbar gives
                             the user feedback. Finally the buttons are hidden. The event handlers
                             are not configured at the same time as the other controls as they
                             are not visible until this method is called.
                          */
-                        float quantity = Float.valueOf(String.valueOf(editQuantity.getText()));
+                            float quantity = Float.valueOf(String.valueOf(editQuantity.getText()));
 
-                        if(quantity != food.getQuantity()){
-                            food.updateQuantities(quantity);
+                            if (quantity != food.getQuantity()) {
+                                food.updateQuantities(quantity);
+                            }
+
+                            dbManager.addFood(food);
+                            Snackbar saveSnackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
+                            saveSnackbar.show();
+                            saveButton.setVisibility(View.INVISIBLE);
+                            cancelButton.setVisibility(View.INVISIBLE);
+                            editQuantity.setVisibility(View.INVISIBLE);
+                            editLabel.setVisibility(View.INVISIBLE);
                         }
-
-                        dbManager.addFood(food);
-                        Snackbar saveSnackbar = Snackbar.make(view, R.string.snack_save_success, Snackbar.LENGTH_SHORT);
-                        saveSnackbar.show();
-                        saveButton.setVisibility(View.INVISIBLE);
-                        cancelButton.setVisibility(View.INVISIBLE);
-                        editQuantity.setVisibility(View.INVISIBLE);
-                        editLabel.setVisibility(View.INVISIBLE);
-                    }
-                });
-                cancelButton.setVisibility(View.VISIBLE);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    });
+                    cancelButton.setVisibility(View.VISIBLE);
+                    cancelButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                         /*  All that needs to happen on cancelling is to reset the display
                             and hide the buttons. A snackbar is used to give the user feedback.
                         */
-                        clearDisplay();
-                        table.setVisibility(View.INVISIBLE);
-                        saveButton.setVisibility(View.INVISIBLE);
-                        cancelButton.setVisibility(View.INVISIBLE);
-                        Snackbar snackbar = Snackbar.make(view, R.string.cancelled, Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                    }
-                });
-            } catch (Exception e) {
-                Log.d("EXCEPTION", "In FoodFragment->onPostExecute()", e);
+                            clearDisplay();
+                            table.setVisibility(View.INVISIBLE);
+                            saveButton.setVisibility(View.INVISIBLE);
+                            cancelButton.setVisibility(View.INVISIBLE);
+                            Snackbar snackbar = Snackbar.make(view, R.string.cancelled, Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.d("EXCEPTION", "In FoodFragment->onPostExecute()", e);
+                }
             }
         }
 

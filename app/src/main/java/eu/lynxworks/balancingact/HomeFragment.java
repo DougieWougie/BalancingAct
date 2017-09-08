@@ -59,7 +59,9 @@ public class HomeFragment extends Fragment {
             optimisation improves performance.
          */
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         final RecyclerView.Adapter adapter = new DayAdapter(getContext());
         recyclerView.setAdapter(adapter);
