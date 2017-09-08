@@ -73,6 +73,8 @@ public class UserActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    Global global = Global.getGlobalInstance();
+                    global.setUser(theUser);
                     Snackbar snackbar = Snackbar.make(view, "Entry updated", Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
